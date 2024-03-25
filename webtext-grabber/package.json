@@ -1,6 +1,6 @@
 {
   "name": "webtext-grabber",
-  "displayName": "Webtext grabber",
+  "displayName": "Webtext Grabber",
   "version": "0.0.1",
   "description": "A browser extension for grabbing selected text in a tab.",
   "author": "Dean Cirielli",
@@ -43,8 +43,7 @@
     ],
     "externally_connectable": {
       "matches": [
-        "*://*.localhost.com/*",
-        "*://*.localhost/*"
+        "*://*.localhost.com/*"
       ]
     }
   }
