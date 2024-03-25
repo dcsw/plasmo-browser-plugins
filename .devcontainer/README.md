@@ -2,29 +2,47 @@ This is a [Plasmo extension](https://docs.plasmo.com/) project bootstrapped with
 
 ## Getting Started
 
+### Setup
+This project depends on scaffolding created by plasma, and the example here was created using the following:
+
+First update pnpm on your host:
+
+```
+npm upgrade -g pnpm
+```
+
+Then scaffold a new plasma project (note that at the time of this writing, the excellent typescript devcontainer provided by Microsoft, mcr.microsoft.com/devcontainers/typescript-node:1-20-bullseye, requires a pnpm upgrade to succeed):
+
+```
+pnpm create plasma --with-messaging webtext-grabber
+```
+
+Follow the prompts until the downloads start. Then get a cup of coffee while this completes.
+
+
 ### Note for pub-sub example
 
 To test the externally connectable API (pub-sub):
 
-1. Configure a second-level domain via your host file. This example uses the config below:
+1. Optional: Configure a second-level domain via your host file. This example uses the config below:
 
 ```
 localhost localhost.com
 ```
 
-2. Add an `.env` file containing the extension ID (see `example.env`)
-
+2. Mandatory for tab messaging: Add an `.env` file containing the extension ID (see `example.env`)
 3. Follow the development server step
 4. Navigate to `https://localhost.com:1947/client-hub-a` to test out the API.
+
+Use the page in 4 in chrome to open tab B. Then open the debugger (inspector) on each tab, and send messages from one to the other. Observe these showing up as new messages in each console.
 
 ### Development server
 
 First, run the development server:
 
 ```bash
-pnpm dev
-# or
-npm run dev
+yarn next telemetry disable # disable "phone home" data
+yarn dev # start things up!
 ```
 
 Open your browser and load the appropriate development build. For example, if you are developing for the chrome browser, using manifest v3, use: `build/chrome-mv3-dev`.
@@ -38,9 +56,8 @@ For further guidance, [visit our Documentation](https://docs.plasmo.com/)
 Run the following:
 
 ```bash
-pnpm build
-# or
-npm run build
+yarn next telemetry disable
+yarn build
 ```
 
 This should create a production bundle for your extension, ready to be zipped and published to the stores.

@@ -2,7 +2,7 @@
   "name": "webtext-grabber",
   "displayName": "Webtext grabber",
   "version": "0.0.1",
-  "description": "A lightweight base repo for an extension that grabs selected text from browser windows.",
+  "description": "A browser extension for grabbing selected text in a tab.",
   "author": "Dean Cirielli",
   "scripts": {
     "start": "next start",
@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "next": "14.1.0",
-    "plasmo": "0.85.0",
+    "plasmo": "0.85.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "@plasmohq/messaging": "0.6.2"
@@ -34,7 +34,8 @@
   "manifest": {
     "permissions": [
       "activeTab",
-      "tabs"
+      "tabs",
+      "nativeMessaging"
     ],
     "host_permissions": [
       "https://*/*",
@@ -42,12 +43,8 @@
     ],
     "externally_connectable": {
       "matches": [
-        "*://*.localhost.com/*"
-      ]
-    },
-    "background": {
-      "scripts": [
-        "background.js"
+        "*://*.localhost.com/*",
+        "*://*.localhost/*"
       ]
     }
   }
