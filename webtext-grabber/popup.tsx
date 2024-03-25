@@ -48,7 +48,7 @@ function IndexPopup() {
       <br />
       <label>Text Data:</label>
       <p>{csResponse}</p>
-      <footer>Crafted by @PlamoHQ</footer>
+      <footer><a href="chrome-extension://dkfgmkbdjkbcfdbibdjcdmbielpbgbje/tabs/welcome.html" target="_blank">Welcome!</a></footer>
     </div>
   )
 }
