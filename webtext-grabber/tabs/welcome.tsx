@@ -1,7 +1,6 @@
 import React from 'react';
 import { usePort } from "@plasmohq/messaging/hook";
-const pkg = require("../package.json")
-const { displayName: name, version, author, dependencies, description } = pkg;
+const { displayName: name, version, author, dependencies, description } = require("../package.json");
 
 type RequestBody = {
   hello: string
