@@ -1,6 +1,6 @@
 import { useState } from "react"
-
 import { sendToBackground, sendToContentScript } from "@plasmohq/messaging"
+import "./styles.css"
 
 function IndexPopup() {
   const [txHash, setTxHash] = useState(undefined)

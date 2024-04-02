@@ -1,17 +1,28 @@
 {
   "extends": "plasmo/templates/tsconfig.base",
-  "exclude": ["node_modules"],
+  "exclude": [
+    "node_modules"
+  ],
   "include": [
     ".plasmo/index.d.ts",
     "next-env.d.ts",
     "window.d.ts",
     "./**/*.ts",
-    "./**/*.tsx" ],
+    "./**/*.tsx"
+  ],
   "compilerOptions": {
     "paths": {
-      "~*": ["./*"]
+      "~*": [
+        "./*"
+      ]
     },
     "baseUrl": ".",
-    "isolatedModules": true
+    "isolatedModules": true,
+  },
+  // NEW: Options for file/directory watching
+  "watchOptions": {
+    // Poll files for updates more frequently
+    // when they're updated a lot.
+    "fallbackPolling": "fixedPollingInterval",
   }
 }

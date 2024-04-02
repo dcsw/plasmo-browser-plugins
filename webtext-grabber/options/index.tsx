@@ -1,6 +1,7 @@
 import React from "react"
 import { useStorage } from "@plasmohq/storage/hook"
 const { displayName: name, version, author, dependencies, description } = require("../package.json");
+import "../styles.css"
 
 function OptionsIndex() {
     const [openAIKey, setOpenAIKey] = useStorage<string>("openAIKey")
@@ -12,7 +13,7 @@ function OptionsIndex() {
             </h1>
             <h2>Settings for {name} version {version}</h2>
             <label>OpenAI Key</label>
-            <input title="OpenAI Key" onChange={(e) => setOpenAIKey(e.target.value)} value={openAIKey || ''} />
+            <input type="text" placeholder="OpenAI Key" onChange={(e) => setOpenAIKey(e.target.value)} value={openAIKey || ''} />
         </div>
     )
 }

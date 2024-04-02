@@ -1,5 +1,4 @@
 import type { PlasmoCSConfig } from "plasmo"
-
 import { relayMessage, sendToBackground } from "@plasmohq/messaging"
 import { relay } from "@plasmohq/messaging/relay"
 
