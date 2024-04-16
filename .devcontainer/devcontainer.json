@@ -3,7 +3,10 @@
 {
 	"name": "Node.js & TypeScript",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "mcr.microsoft.com/devcontainers/typescript-node:1-20-bullseye",
+	// "image": "mcr.microsoft.com/devcontainers/typescript-node:1-20-bullseye",
+	"build": {
+		"dockerfile": "Dockerfile"
+	},
 	"features": {
 		"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
 			"version": "latest"
@@ -30,13 +33,18 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"mhutchie.git-graph"
+				"mhutchie.git-graph",
+				"ms-azuretools.vscode-docker"
 			]
 		}
 	},
 
-	"postStartCommand": "echo Run \"'pnpm create plasmo sample; cd sample; pnpm install; pnpm dev' to create a sample plugin.\n See here for more: https://github.com/PlasmoHQ/plasmo.\""
+	// "postStartCommand": "echo Run \"'pnpm create plasmo sample; cd sample; pnpm install; pnpm dev' to create a sample plugin.\n See here for more: https://github.com/PlasmoHQ/plasmo.\""
 
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
 	// "remoteUser": "root"
+
+	"containerEnv": {
+		"XDG_RUNTIME_DIR": "/tmp"
+	}
 }

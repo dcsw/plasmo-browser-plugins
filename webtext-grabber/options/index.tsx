@@ -7,13 +7,15 @@ function OptionsIndex() {
     const [openAIKey, setOpenAIKey] = useStorage<string>("openAIKey")
 
     return (
-        <div>
-            <h1>
-                {name} Settings
-            </h1>
-            <h2>Settings for {name} version {version}</h2>
-            <label>OpenAI Key</label>
-            <input type="text" placeholder="OpenAI Key" onChange={(e) => setOpenAIKey(e.target.value)} value={openAIKey || ''} />
+        <div className="card"> 
+            <div className="card-body">
+                <h2 className="card-title">Settings for {name} version {version}</h2>
+                <label>OpenAI</label>
+                <label className="input input-bordered flex items-center gap-2">
+                    OpenAI Key
+                    <input type="text" className="grow" placeholder="OpenAI Key" onChange={(e) => setOpenAIKey(e.target.value)} value={openAIKey || ''} />
+                </label>
+            </div>
         </div>
     )
 }
