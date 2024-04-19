@@ -24,11 +24,11 @@ function WelcomeTab() {
         }}>
         Send Port
       </button> */}
-      <h1>Welcome to {name}!</h1>
+      <h1>Welcome to {name}!!</h1>
       <div>This is {name} version {version} {description[0].toLowerCase()}{description.match(/.(.*)\.?$/)[1]} written by {author}.</div>
       <details>
         <summary>Dependencies</summary>
-        {Object.entries(dependencies).map(([n, v], _i) => { return (<div key={n}>{n}@{v}</div>); })}
+        {Object.entries(dependencies).map(([n, v], _i) => { return (<div key={n}>{n}@{v as string}</div>); })}
       </details>
     </div>
   )
