@@ -18,12 +18,11 @@
     },
     "baseUrl": ".",
     "isolatedModules": true,
+    "assumeChangesOnlyAffectDirectDependencies": true
   },
   // NEW: Options for file/directory watching
   "watchOptions": {
-    "watchFile": "fixedPollingInterval",
-    "fallbackPolling": "fixedinterval",
-    "synchronousWatchDirectory": true,
+    // "synchronousWatchDirectory": true,
     "excludeDirectories": [
       "**/node_modules",
       "**/build",
@@ -33,5 +32,7 @@
       // ".next",
       // ".plasmo"
     ],
+    // "watchFile": "fixedPollingInterval",
+    // "watchDirectory": "fixedPollingInterval",
   }
 }
