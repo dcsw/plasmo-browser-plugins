@@ -30,12 +30,8 @@
 	},
 
 	"mounts": [ "source=build,target=/plasmo/build,type=volume" ],
-	// "workspaceMount": "source=${localWorkspaceFolderBasename},target=/plasmo,type=volume",
-	// "workspaceFolder": "/plasmo",
-	"workspaceFolder": "/tmp/plasmo",
 	"containerEnv": {
 		"PLASMO_BUILD_PATH": "/plasmo/build"
 	},
-	// "postCreateCommand": "sudo chown -R node: /plasmo/"
-	"postCreateCommand": "git ls-tree -r main --name-only | xargs -I % cp % /tmp/plasmo"
+	"postCreateCommand": "git config --global --add safe.directory /workspaces/plasmo-browser-plugins && cd /workspaces/plasmo-browser-plugins && git ls-tree -r main --name-only | cpio -pdv /tmp/plasmo && cd /tmp/plasmo/webtext-grabber && pnpm install"
 }
