@@ -33,5 +33,5 @@
 	"containerEnv": {
 		"PLASMO_BUILD_PATH": "/plasmo/build"
 	},
-	"postCreateCommand": "git config --global --add safe.directory /workspaces/plasmo-browser-plugins && cd /workspaces/plasmo-browser-plugins && git ls-tree -r main --name-only | cpio -pdv /tmp/plasmo && cd /tmp/plasmo/webtext-grabber && pnpm install"
+	"postCreateCommand": "git config --global --add safe.directory /workspaces/plasmo-browser-plugins && cd /workspaces/plasmo-browser-plugins && git ls-tree -r --name-only head | cpio -pdv /tmp/plasmo && cd /tmp/plasmo/webtext-grabber && pnpm install"
 }
