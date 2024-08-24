@@ -8,6 +8,7 @@ function IndexPopup() {
   const [selector, setSelector] = useState("#itero")
 
   const [csResponse, setCsData] = useState("")
+  const [welcomeUrl] = useState(`chrome-extension://${chrome.runtime.id}/tabs/welcome.html`)
 
   return (
     <div>
@@ -48,7 +49,7 @@ function IndexPopup() {
       <br />
       <label>Text Data:</label>
       <p>{csResponse}</p>
-      <footer><a href="chrome-extension://dkfgmkbdjkbcfdbibdjcdmbielpbgbje/tabs/welcome.html" target="_blank">Welcome!</a></footer>
+      <footer><a href={welcomeUrl} target="_blank">Welcome!</a></footer>
     </div>
   )
 }
