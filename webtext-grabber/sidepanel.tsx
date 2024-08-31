@@ -5,7 +5,7 @@ import { sendToBackground, sendToContentScript } from "@plasmohq/messaging"
 function IndexPopup() {
   const [txHash, setTxHash] = useState(undefined)
   const [txInput, setTxInput] = useState(0)
-  const [selector, setSelector] = useState("#itero")
+  const [selector, setSelector] = useState("body")
 
   const [csResponse, setCsData] = useState("")
   const [welcomeUrl] = useState(`chrome-extension://${chrome.runtime.id}/tabs/welcome.html`)

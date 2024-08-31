@@ -1,15 +1,15 @@
-// import type { PlasmoCSConfig } from "plasmo"
+import type { PlasmoCSConfig } from "plasmo"
 
-// import { useMessage } from "@plasmohq/messaging/hook"
+import { useMessage } from "@plasmohq/messaging/hook"
 
-// export const config: PlasmoCSConfig = {
-//   all_frames: true
-// }
+export const config: PlasmoCSConfig = {
+  all_frames: true
+}
 
-// const QueryTextAnywhere = () => {
-//   const { data } = useMessage<string, string>(async (req, res) => {
-//     res.send(document.querySelector(req.body).textContent)
-//   })
+const QueryTextAnywhere = () => {
+  const { data } = useMessage<string, string>(async (req, res) => {
+    res.send(document.querySelector(req.body).textContent)
+  })
 //   return (
 //     <div
 //       style={{
@@ -20,6 +20,6 @@
 //       Querying Selector for: {data}
 //     </div>
 //   )
-// }
+}
 
-// export default QueryTextAnywhere
+export default QueryTextAnywhere
