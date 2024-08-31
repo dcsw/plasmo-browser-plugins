@@ -39,7 +39,7 @@
 		}
 	},
 
-	"postStartCommand": "echo Run \"'pnpm create plasmo sample; cd sample; pnpm install; pnpm dev' to create a sample plugin.\n See here for more: https://github.com/PlasmoHQ/plasmo.\"",
+	// "postStartCommand": "echo Run \"'pnpm create plasmo sample; cd sample; pnpm install; pnpm dev' to create a sample plugin.\n See here for more: https://github.com/PlasmoHQ/plasmo.\"",
 
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
 	"remoteUser": "root"
