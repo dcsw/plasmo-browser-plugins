@@ -20,6 +20,7 @@ const QueryTextAnywhere = () => {
 //       Querying Selector for: {data}
 //     </div>
 //   )
+  return (<div></div>)
 }
 
 export default QueryTextAnywhere
