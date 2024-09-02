@@ -22,7 +22,8 @@ const IndexPopup = () => {
       }
       return result.slice(0, length);
     };
-    // addNewTextBlob(generateLoremIpsum(1000)); // Add initial text blob...
+
+    // infiniteScroller.current.addNewTextBlob(generateLoremIpsum(1000)); // Add initial text blob...
 
     intervalRef.current = setInterval(() => {
       infiniteScroller.current.addNewTextBlob(generateLoremIpsum(1000));
