@@ -29,28 +29,29 @@ const InfiniteScroller = () => {
     return result.slice(0, length);
   };
 
-  const addNewTextBlob = useCallback(() => {
-    const newText = generateLoremIpsum(1000);
+  const addNewTextBlob = useCallback((newText) => {
     setItems((prevItems) => [...prevItems, newText]);
   }, []);
 
   useEffect(() => {
-    addNewTextBlob(); // Add initial text blob
+    // addNewTextBlob(generateLoremIpsum(1000)); // Add initial text blob...
 
     intervalRef.current = setInterval(() => {
-      addNewTextBlob();
-    }, 2000) as any; // 10 seconds
+      addNewTextBlob(generateLoremIpsum(1000));
+    }, 100) as any; // 0.1 second
 
-    // Stop after 60 seconds
+    // Stop after 2.5 seconds
     const timeout = setTimeout(() => {
       clearInterval(intervalRef.current);
-    }, 60000);
+    }, 2500);
 
     return () => {
       clearInterval(intervalRef.current);
       clearTimeout(timeout);
     };
-  }, [addNewTextBlob]);
+    // }, [addNewTextBlob]);
+    // }, [items.length]);
+  }, []); // empty deps array makes useEffect() only trigger 1x on initial render
 
   return (
     <div className="infinite-scroller">
