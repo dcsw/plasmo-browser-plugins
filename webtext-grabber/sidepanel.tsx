@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { default as InfiniteScroller  } from "components/infinite-scroller"
 
 import { sendToBackground, sendToContentScript } from "@plasmohq/messaging"
 
@@ -48,7 +49,8 @@ function IndexPopup() {
       </button>
       <br />
       <label>Text Data:</label>
-      <p>{csResponse}</p>
+      {/* <p>{csResponse}</p> */}
+      <InfiniteScroller></InfiniteScroller>
       <footer><a href={welcomeUrl} target="_blank">Welcome!</a></footer>
     </div>
   )
