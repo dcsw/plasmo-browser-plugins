@@ -32,11 +32,10 @@ export const InfiniteScroller = forwardRef((props, ref) => {
         <div
           key={index}
           ref={index === items.length - 1 ? lastItemRef : null}
-          // ref={'item# ' + index} -- bad....
           className="item"
         >
           <h3>Text Blob {index + 1}</h3>
-          <p>{item}</p>
+          <div dangerouslySetInnerHTML={{ __html: item}}/>
         </div>
       ))}
       {loading && <div className="loading">Loading...</div>}

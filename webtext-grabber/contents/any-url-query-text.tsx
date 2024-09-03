@@ -8,7 +8,8 @@ export const config: PlasmoCSConfig = {
 
 const QueryTextAnywhere = () => {
   const { data } = useMessage<string, string>(async (req, res) => {
-    res.send(document.querySelector(req.body).textContent)
+    console.log(req.body)
+    res.send(document.querySelector(req.body).innerHTML)
   })
 //   return (
 //     <div
