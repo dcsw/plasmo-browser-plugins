@@ -35,12 +35,13 @@
     "permissions": [
       "activeTab",
       "tabs",
-      "nativeMessaging"
+      "nativeMessaging",
+      "scripting"
     ],
-    "host_permissions": [
-      "https://*/*",
-      "http://*/*"
-    ],
+    "host_permissions": ["<all_urls>"],
+    "content_security_policy": {
+      "extension_pages": "script-src 'self'; object-src 'self'; style-src 'self' 'unsafe-inline' https://*"
+    },
     "externally_connectable": {
       "matches": [
         "*://*.localhost.com/*"

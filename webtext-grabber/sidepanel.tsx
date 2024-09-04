@@ -3,7 +3,7 @@ import { InfiniteScroller } from "components/infinite-scroller"
 import { sendToContentScript } from "@plasmohq/messaging"
 
 const IndexPopup = () => {
-  const [selector, setSelector] = useState("body")
+  const [selector, setSelector] = useState("html")
 
   const [csResponse, setCsData] = useState("")
   const [welcomeUrl] = useState(`chrome-extension://${chrome.runtime.id}/tabs/welcome.html`)
@@ -12,18 +12,22 @@ const IndexPopup = () => {
 
   return (
     <div>
-      <input value={selector} onChange={(e) => setSelector(e.target.value)} />
+      <details>
+        <summary>Settings</summary>
+        <input value={selector} onChange={async (e) => setSelector(e.target.value)} />
+      </details>
 
       <button
-        onClick={async () => {
-          const csResponse = await sendToContentScript({
+        onClick={() => {
+          sendToContentScript({
             name: "query-selector-text",
             body: selector
+          }).then((csResponse) => {
+            setCsData(csResponse);
+            infiniteScroller.current.addNewTextBlob("Capture", csResponse);
           })
-          setCsData(csResponse)
-          infiniteScroller.current.addNewTextBlob(csResponse);
         }}>
-        Query Text on Web Page
+        Capture Web Page
       </button>
       <br />
       <label>Text Data:</label>

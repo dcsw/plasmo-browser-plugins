@@ -7,8 +7,8 @@ export const InfiniteScroller = forwardRef((props, ref) => {
 
   // Expose functions to parent
   useImperativeHandle(ref, () => ({
-    addNewTextBlob: (newText) => {
-      setItems((prevItems) => [...prevItems, newText]);
+    addNewTextBlob: (itemTitle, newHtml) => {
+      setItems((prevItems) => [...prevItems, { title: itemTitle, html: newHtml }]);
     }
   }));
 
@@ -31,11 +31,11 @@ export const InfiniteScroller = forwardRef((props, ref) => {
       {items.map((item, index) => (
         <div
           key={index}
-          ref={index === items.length - 1 ? lastItemRef : null}
+          // ref={index === items.length - 1 ? lastItemRef : null}
           className="item"
         >
-          <h3>Text Blob {index + 1}</h3>
-          <div dangerouslySetInnerHTML={{ __html: item}}/>
+          <h3>{item.title + ' #' + (index + 1)}</h3>
+          <div dangerouslySetInnerHTML={{ __html: item.html}}/>
         </div>
       ))}
       {loading && <div className="loading">Loading...</div>}
