@@ -1,6 +1,7 @@
 // import type { PlasmoMessaging } from "@plasmohq/messaging"
 import type { PlasmoCSConfig } from "plasmo"
 import { useMessage } from "@plasmohq/messaging/hook"
+import html2canvas from 'html2canvas';
 
 export const config: PlasmoCSConfig = {
   matches: ["<all_urls>"],
@@ -20,28 +21,48 @@ const screenCapture = () => {
 }
 
 async function captureFullPage(): Promise<string> {
+  const element = document.querySelector('html');
+  if (element) {
+    const canvas :HTMLCanvasElement = await html2canvas(element)
+      const image = await canvas.toDataURL('image/png');
+      // const link = document.createElement('a');
+      // link.href = image;
+      // link.download = 'screenshot.png';
+      // link.click();
+      return image;
+  }
+  return null;
+}
+
+
+async function captureFullPagexxx(): Promise<string> {
   const fullHeight = document.body.scrollHeight
+  const fullWidth = document.body.scrollWidth
   const viewportWidth = window.innerWidth
   const viewportHeight = window.innerHeight
 
   const canvas = document.createElement('canvas')
-  canvas.width = viewportWidth
+  canvas.width = fullWidth
   canvas.height = fullHeight
   const ctx = canvas.getContext('2d')
 
-  let yOffset = 0
-  while (yOffset < fullHeight) {
-    window.scrollTo(0, yOffset)
+  let xOffset = 0, yOffset
+  while (xOffset < fullWidth) {
+    yOffset = 0
+    while (yOffset < fullHeight) {
+      window.scrollTo(xOffset, yOffset)
 
-    // Wait for any lazy-loaded content and reflows
-    await new Promise(resolve => setTimeout(resolve, 100))
+      // Wait for any lazy-loaded content and reflows
+      await new Promise(resolve => setTimeout(resolve, 100))
 
-    const dataUrl = await captureVisiblePart()
-    const img = await loadImage(dataUrl)
+      const dataUrl = await captureVisiblePart()
+      const img = await loadImage(dataUrl)
 
-    ctx.drawImage(img, 0, yOffset)
+      ctx.drawImage(img, xOffset, yOffset)
 
-    yOffset += viewportHeight
+      yOffset += viewportHeight
+    }
+    xOffset += viewportWidth
   }
 
   // Scroll back to top
@@ -53,13 +74,12 @@ async function captureFullPage(): Promise<string> {
 async function captureVisiblePart(): Promise<string> {
   try {
     const dataUrl = await captureViewport();
-    console.log('Viewport captured', dataUrl);
+    // console.log('Viewport captured', dataUrl);
     return dataUrl;
   } catch (e) {
     console.error('Error capturing viewport:', e);
   }
 }
-
 
 function captureViewport(): Promise<string> {
   return new Promise((resolve, reject) => {

@@ -15,21 +15,23 @@
     "package": "plasmo package"
   },
   "dependencies": {
+    "@plasmohq/messaging": "0.6.2",
+    "@types/html2canvas": "^1.0.0",
+    "html2canvas": "^1.4.1",
     "next": "14.1.0",
     "plasmo": "0.89.1",
     "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "@plasmohq/messaging": "0.6.2"
+    "react-dom": "18.2.0"
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "4.1.1",
+    "@plasmohq/rps": "1.8.7",
     "@types/chrome": "0.0.258",
     "@types/node": "20.11.5",
     "@types/react": "18.2.48",
     "@types/react-dom": "18.2.18",
     "prettier": "3.2.4",
-    "typescript": "5.3.3",
-    "@plasmohq/rps": "1.8.7"
+    "typescript": "5.3.3"
   },
   "manifest": {
     "permissions": [
@@ -38,9 +40,6 @@
     "host_permissions": [
       "<all_urls>"
     ],
-    "content_security_policy": {
-      "extension_pages": "script-src 'self'; object-src 'self'; style-src 'self' 'unsafe-inline' https://*"
-    },
     "action": {
       "default_title": "Open Side Panel"
     }

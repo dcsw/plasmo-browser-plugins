@@ -21,7 +21,7 @@ const IndexPopup = () => {
             async function captureFullPageScreenshot(): Promise<string> {
               const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
               return await sendToContentScript({
-                name: "screenCapture",
+                name: "screenCapture-html2canvas",
                 tabId: tab.id
               });
             }
