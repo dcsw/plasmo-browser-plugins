@@ -1,9 +1,9 @@
 {
   "name": "webtext-grabber",
-  "displayName": "Webtext Grabber",
+  "displayName": "Webtext grabber",
   "version": "0.0.1",
-  "description": "A browser extension for grabbing selected text in a tab.",
-  "author": "Dean Cirielli",
+  "description": "A basic Plasmo extension.",
+  "author": "dcsw",
   "scripts": {
     "start": "next start",
     "dev": "run-p dev:*",
@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "next": "14.1.0",
-    "plasmo": "0.85.2",
+    "plasmo": "0.89.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "@plasmohq/messaging": "0.6.2"
@@ -35,20 +35,16 @@
     "permissions": [
       "activeTab",
       "tabs",
-      "nativeMessaging",
       "scripting"
     ],
-    "host_permissions": ["<all_urls>"],
+    "host_permissions": [
+      "<all_urls>"
+    ],
     "content_security_policy": {
       "extension_pages": "script-src 'self'; object-src 'self'; style-src 'self' 'unsafe-inline' https://*"
     },
-    "externally_connectable": {
-      "matches": [
-        "*://*.localhost.com/*"
-      ]
-    },
     "action": {
-      "default_title": "Click to open panel"
+      "default_title": "Open Side Panel"
     }
   }
 }
