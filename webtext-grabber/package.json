@@ -33,9 +33,7 @@
   },
   "manifest": {
     "permissions": [
-      "activeTab",
-      "tabs",
-      "scripting"
+      "activeTab"
     ],
     "host_permissions": [
       "<all_urls>"

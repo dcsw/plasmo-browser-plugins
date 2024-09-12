@@ -51,22 +51,6 @@ async function captureFullPage(): Promise<string> {
 }
 
 async function captureVisiblePart(): Promise<string> {
-  // return new Promise((resolve) => {
-  //   const canvas = document.createElement('canvas')
-  //   canvas.width = window.innerWidth
-  //   canvas.height = window.innerHeight
-  //   const ctx = canvas.getContext('2d')
-  //   ctx.drawImage(document.documentElement, 0, 0)
-  //   resolve(canvas.toDataURL())
-  // })
-  // captureViewport()
-  // .then(dataUrl => {
-  //   console.log('Viewport captured:', dataUrl);
-  //   // You can now use this dataUrl as needed
-  // })
-  // .catch(error => {
-  //   console.error('Error capturing viewport:', error);
-  // });
   try {
     const dataUrl = await captureViewport();
     console.log('Viewport captured', dataUrl);
