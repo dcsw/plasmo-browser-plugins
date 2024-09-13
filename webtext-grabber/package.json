@@ -1,8 +1,8 @@
 {
-  "name": "webtext-grabber",
-  "displayName": "Webtext grabber",
-  "version": "0.0.1",
-  "description": "A basic Plasmo extension.",
+  "name": "webshot-grabber",
+  "displayName": "WebShot Grabber",
+  "version": "0.1.1",
+  "description": "A simple screen shotter browser plugin.",
   "author": "dcsw",
   "scripts": {
     "start": "next start",
@@ -35,7 +35,8 @@
   },
   "manifest": {
     "permissions": [
-      "activeTab"
+      "activeTab",
+      "scripting"
     ],
     "host_permissions": [
       "<all_urls>"

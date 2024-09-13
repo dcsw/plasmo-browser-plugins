@@ -1,4 +1,3 @@
-// import type { PlasmoMessaging } from "@plasmohq/messaging"
 import type { PlasmoCSConfig } from "plasmo"
 import { useMessage } from "@plasmohq/messaging/hook"
 import html2canvas from 'html2canvas';
@@ -11,24 +10,20 @@ export const config: PlasmoCSConfig = {
 const screenCapture = () => {
   const { data } = useMessage<string, string>(async (req, res) => {
     try {
-      const dataUrl = await captureFullPage()
+      const dataUrl = await captureFullPage(req.selector)
       res.send(dataUrl)
     } catch (error) {
       res.send(error.message)
     }
   })
-  return (<div></div>);
+  return true;
 }
 
-async function captureFullPage(): Promise<string> {
-  const element = document.querySelector('html');
+async function captureFullPage(selector: string): Promise<string> {
+  const element: HTMLElement = document.querySelector(selector);
   if (element) {
     const canvas :HTMLCanvasElement = await html2canvas(element)
       const image = await canvas.toDataURL('image/png');
-      // const link = document.createElement('a');
-      // link.href = image;
-      // link.download = 'screenshot.png';
-      // link.click();
       return image;
   }
   return null;
