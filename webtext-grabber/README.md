@@ -48,16 +48,3 @@ This should create a production bundle for your extension, ready to be zipped an
 ## Submit to the webstores
 
 The easiest way to deploy your Plasmo extension is to use the built-in [bpp](https://bpp.browser.market) GitHub action. Prior to using this action however, make sure to build your extension and upload the first version to the store to establish the basic credentials. Then, simply follow [this setup instruction](https://docs.plasmo.com/framework/workflows/submit) and you should be on your way for automated submission!
-
-
-## Advice for Windows Developers!!!
-### Run in the WSL file system!
-
-#### Install WSL
-Pretty easy -- from the command line in Windows, run:
-```
-wsl --install
-```
-Command window will work, as will a terminal window, even a vscode embedded terminal window.
-
-####

@@ -6,7 +6,8 @@
     "next-env.d.ts",
     "window.d.ts",
     "./**/*.ts",
-    "./**/*.tsx" ],
+    "./**/*.tsx"
+, "service-worker.js"  ],
   "compilerOptions": {
     "paths": {
       "~*": ["./*"]
