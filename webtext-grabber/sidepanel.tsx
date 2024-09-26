@@ -27,7 +27,7 @@ const IndexPopup = () => {
       const fullPageDataUrl = await captureFullPageScreenshot()
       if (!fullPageDataUrl.match(/^data\:/)) throw (fullPageDataUrl) // condition hack to detect content script exception
       let img = document.createElement('img');
-      img.crossOrigin = 'Anonymous';
+      img.crossOrigin = 'anonymous';
       img.src = fullPageDataUrl;
       infiniteScroller.current.addNewTextBlob("Capture", img.outerHTML);
     } catch (error) {
@@ -41,11 +41,11 @@ const IndexPopup = () => {
   return (
     <div>
       <a className="welcome" href={welcomeUrl} target="_blank">Welcome!</a>
-      <ExpanderButton summary="">
+      <ExpanderButton className="settings" summary="">
         <div>Settings</div>
         <input value={selector} onChange={async (e) => setSelector(e.target.value)} />
         <details open>
-          <summary>Error</summary>
+          <summary className="errors">Errors</summary>
           <InfiniteScroller ref={errorScroller}></InfiniteScroller>
         </details>
       </ExpanderButton>

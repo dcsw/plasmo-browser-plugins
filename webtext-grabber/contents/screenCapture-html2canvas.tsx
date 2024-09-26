@@ -3,7 +3,8 @@ import { useMessage } from "@plasmohq/messaging/hook"
 import html2canvas from './html2canvas.min';
 
 export const config: PlasmoCSConfig = {
-
+  matches: ["<all_urls>"],
+  all_frames: true
 }
 
 const screenCapture = () => {
@@ -25,11 +26,15 @@ const captureFullPage = async (selector: string) => {
   const element: HTMLElement = document.querySelector(selector);
   if (element) {
     const canvas = await html2canvas(element, {
-      width: window.innerHeight,
-      height: window.innerHeight,
-      // allowTaint: true
+      // width: window.outerWidth,
+      // height: window.outerHeight,
+      // width: document.documentElement.clientWidth,
+      // height: document.documentElement.clientHeight,
+      allowTaint: true,
+      useCORS: true,
+      foreignObjectRendering: true
     })
-    const ctx = canvas.getContext('2d');
+    // const ctx = canvas.getContext('2d');
     // ctx.clearRect(0, 0, canvas.width, canvas.height);
     // Now use canvas
     const imageURL = await canvas.toDataURL('image/png');
