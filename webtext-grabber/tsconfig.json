@@ -7,7 +7,7 @@
     "window.d.ts",
     "./**/*.ts",
     "./**/*.tsx"
-, "service-worker.js"  ],
+],
   "compilerOptions": {
     "paths": {
       "~*": ["./*"]

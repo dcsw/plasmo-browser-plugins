@@ -12,7 +12,8 @@
     "build": "run-s build:*",
     "build:plasmo": "plasmo build",
     "build:next": "next build",
-    "package": "plasmo package"
+    "package": "plasmo package",
+    "disable-telemetry": "pnpm exec next telemetry disable"
   },
   "dependencies": {
     "@plasmohq/messaging": "0.6.2",
@@ -35,11 +36,18 @@
   },
   "manifest": {
     "permissions": [
-      "activeTab"
+      "activeTab",
+      "tabs",
+      "sidePanel"
     ],
     "host_permissions": [
-      "<all_urls>"
+      "https://*/*",
+      "http://*/*",
+       "<all_urls>"
     ],
+    "content_security_policy": {
+      "extension_pages": "script-src 'self'; object-src 'self'; style-src 'self'; img-src 'self' data:"
+    },
     "action": {
       "default_title": "Open Side Panel"
     }

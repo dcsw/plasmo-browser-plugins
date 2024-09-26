@@ -1,52 +1,62 @@
 import React, { useState, useRef } from "react"
-import { sendToContentScript } from "@plasmohq/messaging"
+import { type PlasmoMessaging, sendToContentScript, sendToBackground } from "@plasmohq/messaging"
 import { InfiniteScroller } from "components/infinite-scroller"
 import 'assets/styles.css'
 import ExpanderButton from 'components/settings-expander'
-
 
 const IndexPopup = () => {
   const [selector, setSelector] = useState("html")
   const [welcomeUrl] = useState(`chrome-extension://${chrome.runtime.id}/tabs/welcome.html`)
   const infiniteScroller = useRef(null)
+  const errorScroller = useRef(null)
+
+  const screenShotPage = async () => {
+    const captureFullPageScreenshot = async (): Promise<string> => {
+      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
+      return await sendToContentScript({
+        name: "screenCapture-html2canvas",
+        tabId: tab.id,
+        body: {
+          selector: selector
+        }
+      });
+    }
+
+    // Usage
+    try {
+      const fullPageDataUrl = await captureFullPageScreenshot()
+      if (!fullPageDataUrl.match(/^data\:/)) throw (fullPageDataUrl) // condition hack to detect content script exception
+      let img = document.createElement('img');
+      img.crossOrigin = 'Anonymous';
+      img.src = fullPageDataUrl;
+      infiniteScroller.current.addNewTextBlob("Capture", img.outerHTML);
+    } catch (error) {
+      const err = JSON.parse(error)
+      const errorDiv = document.createElement('div')
+      errorDiv.innerText = err.stack
+      errorScroller.current.addNewTextBlob("Error", errorDiv.outerHTML);
+    }
+  }
 
   return (
     <div>
-
+      <a className="welcome" href={welcomeUrl} target="_blank">Welcome!</a>
       <ExpanderButton summary="">
         <div>Settings</div>
         <input value={selector} onChange={async (e) => setSelector(e.target.value)} />
+        <details open>
+          <summary>Error</summary>
+          <InfiniteScroller ref={errorScroller}></InfiniteScroller>
+        </details>
       </ExpanderButton>
 
       <button
-        onClick={async () => {
-          async function captureFullPageScreenshot(): Promise<string> {
-            const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-            return await sendToContentScript({
-              name: "screenCapture-html2canvas",
-              tabId: tab.id,
-              selector: selector
-            });
-          }
-
-          // Usage
-          captureFullPageScreenshot()
-            .then(fullPageDataUrl => {
-              let img = document.createElement('img');
-              img.src = fullPageDataUrl;
-              infiniteScroller.current.addNewTextBlob("Capture", img.outerHTML);
-            })
-            .catch(error => {
-              console.error("Failed to capture full page screenshot:", error)
-            });
-        }}>
+        onClick={screenShotPage}>
         Capture Web Page
       </button>
       <br />
-      <label>Text Data:</label>
       <InfiniteScroller ref={infiniteScroller}></InfiniteScroller>
-      <footer><a href={welcomeUrl} target="_blank">Welcome!</a></footer>
-    </div>
+    </div >
   )
 }
 
