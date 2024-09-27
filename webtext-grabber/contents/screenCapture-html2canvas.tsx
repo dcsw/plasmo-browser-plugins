@@ -34,11 +34,8 @@ const captureFullPage = async (selector: string) => {
       useCORS: true,
       foreignObjectRendering: true
     })
-    // const ctx = canvas.getContext('2d');
-    // ctx.clearRect(0, 0, canvas.width, canvas.height);
     // Now use canvas
     const imageURL = await canvas.toDataURL('image/png');
-    // window.open(imageURL)
     return imageURL;
   }
   return null;
