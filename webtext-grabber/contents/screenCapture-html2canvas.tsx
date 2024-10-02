@@ -4,7 +4,8 @@ import html2canvas from './html2canvas.min';
 
 export const config: PlasmoCSConfig = {
   matches: ["<all_urls>"],
-  all_frames: true
+  all_frames: true,
+  world: "MAIN"
 }
 
 const screenCapture = () => {
@@ -13,7 +14,7 @@ const screenCapture = () => {
       try {
         const dataUrl = await captureFullPage(req.body.selector)
         if (!dataUrl.match(/^data\:/)) throw new Error("Error: ", dataUrl);
-        res.send(dataUrl)
+        res.send(JSON.stringify({ url: document.location.href, title: document.title, screenshotUrl: dataUrl }))
       } catch (error) {
         res.send(JSON.stringify(error))
       }
@@ -31,7 +32,9 @@ const captureFullPage = async (selector: string) => {
       // width: document.documentElement.clientWidth,
       // height: document.documentElement.clientHeight,
       allowTaint: true,
+      logging: true,
       useCORS: true,
+      imageTimeout: 0,
       foreignObjectRendering: true
     })
     // Now use canvas

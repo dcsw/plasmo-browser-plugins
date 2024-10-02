@@ -9,7 +9,8 @@ export const InfiniteScroller = forwardRef((props, ref) => {
   useImperativeHandle(ref, () => ({
     addNewTextBlob: (itemTitle, newHtml) => {
       setItems((prevItems) => [...prevItems, { title: itemTitle, html: newHtml }]);
-    }
+    },
+    items: items
   }));
 
   const lastItemRef = useCallback(
@@ -34,7 +35,7 @@ export const InfiniteScroller = forwardRef((props, ref) => {
           // ref={index === items.length - 1 ? lastItemRef : null}
           className="item"
         >
-          <h3>{item.title + ' #' + (index + 1)}</h3>
+          {item.title ? <h3>{item.title + ' #' + (index + 1)}</h3> : null}
           <div dangerouslySetInnerHTML={{ __html: item.html}}/>
         </div>
       ))}

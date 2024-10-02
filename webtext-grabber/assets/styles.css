@@ -1,40 +1,48 @@
 .welcome {
   display: flex;
   float: left;
+  margin-top: 4px;
+  margin-left: 8px;
 }
 
 .expander-button {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    /* width: 100%; */
-    padding: 8px 16px;
-    /* background-color: #f0f0f0; */
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    list-style: none;
-  }
-  
-  .expander-button::-webkit-details-marker {
-    display: none;
-  }
-  
-  .icon {
-    width: 24px;
-    height: 24px;
-    transition: transform 0.3s ease;
-    margin-right: 8%;
-  }
-  
-  details[open] .icon {
-    transform: rotate(180deg);
-  }
-  
-  .expanded-content {
-    margin-top: 16px;
-    padding: 16px;
-    background-color: #f9f9f9;
-    border-radius: 4px;
-  }
-  
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* width: 100%; */
+  padding: 8px 16px;
+  /* background-color: #f0f0f0; */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.expander-button::-webkit-details-marker {
+  display: none;
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.3s ease;
+  margin-right: 8%;
+}
+
+details[open] .icon {
+  transform: rotate(180deg);
+}
+
+.expanded-content {
+  /* margin-top: 16px; */
+  padding: 16px;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+}
+
+.errors.none {
+  color: lightgray;
+}
+.errors.some {
+  color: red;
+}
