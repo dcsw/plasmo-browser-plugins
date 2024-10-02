@@ -26,13 +26,13 @@ const IndexPopup = () => {
 
     // Usage
     try {
-      // const fullPageDataUrl = await captureFullPageScreenshot()
-      // if (!fullPageDataUrl.match(/.*data\:/)) throw (fullPageDataUrl) // condition hack to detect content script exception
-      // const resultObj = JSON.parse(fullPageDataUrl)
-      const fullPageDataUrl = await chrome.tabs.captureVisibleTab()
-      const tabs = await chrome.tabs.query({ currentWindow: true, active: true })
-      const t = tabs[0]
-      const resultObj = { title: t.title, url: t.url, screenshotUrl: fullPageDataUrl }
+      const fullPageDataUrl = await captureFullPageScreenshot()
+      if (!fullPageDataUrl.match(/.*data\:/)) throw (fullPageDataUrl) // condition hack to detect content script exception
+      const resultObj = JSON.parse(fullPageDataUrl)
+      // const fullPageDataUrl = await chrome.tabs.captureVisibleTab()
+      // const tabs = await chrome.tabs.query({ currentWindow: true, active: true })
+      // const t = tabs[0]
+      // const resultObj = { title: t.title, url: t.url, screenshotUrl: fullPageDataUrl }
       const div = document.createElement('div')
       div.innerHTML = `
       <details>
