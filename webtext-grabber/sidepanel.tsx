@@ -3,25 +3,38 @@ import { type PlasmoMessaging, sendToContentScript, sendToBackground } from "@pl
 import { InfiniteScroller } from "components/infinite-scroller"
 import 'assets/styles.css'
 import ExpanderButton from 'components/settings-expander'
+import CoverArtFlow from 'components/cover-art-flow'
 
 const IndexPopup = () => {
   const [selector, setSelector] = useState("html")
   const [welcomeUrl] = useState(`chrome-extension://${chrome.runtime.id}/tabs/welcome.html`)
   const infiniteScroller = useRef(null)
   const errorScroller = useRef(null)
+  const coverArtFlow = useRef(null)
   const [haveErrors, setHaveErrors] = useState(false)
 
   const screenShotPage = async () => {
     const captureFullPageScreenshot = async (): Promise<string> => {
-      // throw new Error("moose") // test errors
-      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
-      return await sendToContentScript({
-        name: "screenCapture-html2canvas",
-        tabId: tab.id,
-        body: {
-          selector: selector
-        }
-      });
+      try {
+        const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
+        const str = await sendToContentScript({
+          name: "screenCapture-html2canvas",
+          tabId: tab.id,
+          body: {
+            selector: selector
+          }
+        });
+        if (str.match(/.*data\:\,/)) throw (str) // condition hack to detect empty data:, url
+        return str;
+      } catch (e) {
+        // Capture what we can. Note that captureVisibleTab() only captures what's visible, not the entire element.
+        console.log(`Unable to capture full element for selector '${selector}' -- reverting to visible screenshot.`)
+        const fullPageDataUrl = await chrome.tabs.captureVisibleTab()
+        const tabs = await chrome.tabs.query({ currentWindow: true, active: true })
+        const t = tabs[0]
+        const resultObj = { title: t.title, url: t.url, screenshotUrl: fullPageDataUrl }
+        return Promise.resolve(JSON.stringify(resultObj))
+      }
     }
 
     // Usage
@@ -29,10 +42,6 @@ const IndexPopup = () => {
       const fullPageDataUrl = await captureFullPageScreenshot()
       if (!fullPageDataUrl.match(/.*data\:/)) throw (fullPageDataUrl) // condition hack to detect content script exception
       const resultObj = JSON.parse(fullPageDataUrl)
-      // const fullPageDataUrl = await chrome.tabs.captureVisibleTab()
-      // const tabs = await chrome.tabs.query({ currentWindow: true, active: true })
-      // const t = tabs[0]
-      // const resultObj = { title: t.title, url: t.url, screenshotUrl: fullPageDataUrl }
       const div = document.createElement('div')
       div.innerHTML = `
       <details>
@@ -41,7 +50,8 @@ const IndexPopup = () => {
         <img src="${resultObj.screenshotUrl}"/>
       </details>
       `
-      infiniteScroller.current.addNewTextBlob(null, div.outerHTML);
+      // infiniteScroller.current.addNewTextBlob(null, div.outerHTML);
+      coverArtFlow.current.addItem(div.outerHTML);
     } catch (error) {
       setHaveErrors(true)
       const err = error instanceof Error ? error : JSON.parse(error)
@@ -68,7 +78,8 @@ const IndexPopup = () => {
         Capture Web Page
       </button>
       <br />
-      <InfiniteScroller ref={infiniteScroller}></InfiniteScroller>
+      {/* <InfiniteScroller ref={infiniteScroller}></InfiniteScroller> */}
+      <CoverArtFlow ref={coverArtFlow}></CoverArtFlow>
     </div >
   )
 }
