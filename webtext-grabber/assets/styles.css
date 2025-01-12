@@ -46,3 +46,11 @@ details[open] .icon {
 .errors.some {
   color: red;
 }
+
+
+.downloadLink:not([href]) { 
+  display: none;
+}
+.downloadLink[href] { 
+  display: inline;
+}

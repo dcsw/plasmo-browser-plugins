@@ -3,6 +3,7 @@ import { type PlasmoMessaging, sendToContentScript, sendToBackground } from "@pl
 import { InfiniteScroller } from "components/infinite-scroller"
 import 'assets/styles.css'
 import ExpanderButton from 'components/settings-expander'
+import { makeDoc } from './DocxGenerator';
 
 const IndexPopup = () => {
   const [selector, setSelector] = useState("html")
@@ -41,7 +42,8 @@ const IndexPopup = () => {
         <img src="${resultObj.screenshotUrl}"/>
       </details>
       `
-      infiniteScroller.current.addNewTextBlob(null, div.outerHTML);
+      await infiniteScroller.current.addNewTextBlob(null, div.outerHTML);
+      await generateDocx()
     } catch (error) {
       setHaveErrors(true)
       const err = error instanceof Error ? error : JSON.parse(error)
@@ -49,6 +51,25 @@ const IndexPopup = () => {
       errorDiv.innerText = err.stack
       errorScroller.current.addNewTextBlob("Error", errorDiv.outerHTML);
     }
+  }
+
+  const generateDocx = async () => {
+    const buffer = await makeDoc('.infinite-scroller')
+    // Use the buffer (e.g., save to file or send as response)
+    const blob = new Blob([buffer], { type: 'application/octet-binary' });
+    const link = document.querySelector('.downloadLink')
+    link.href = URL.createObjectURL(blob);
+    link.download = "filename.docx"; // Specify the desired filename
+    // link.style.display = 'none'; // Make it invisible but downloadable
+
+    // // Append to body and then remove
+    // document.body.appendChild(link);
+    // link.click();
+
+    // setTimeout(() => {
+    //   link.remove();
+    //   window.URL.revokeObjectURL(link.href); // Clean up
+    // }, 100);
   }
 
   return (
@@ -67,6 +88,7 @@ const IndexPopup = () => {
         onClick={screenShotPage}>
         Capture Web Page
       </button>
+      <a className="downloadLink">Download Document</a>
       <br />
       <InfiniteScroller ref={infiniteScroller}></InfiniteScroller>
     </div >
