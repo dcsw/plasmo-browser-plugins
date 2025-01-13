@@ -14,7 +14,6 @@ const IndexPopup = () => {
 
   const screenShotPage = async () => {
     const captureFullPageScreenshot = async (): Promise<string> => {
-      // throw new Error("moose") // test errors
       const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
       return await sendToContentScript({
         name: "screenCapture-html2canvas",
@@ -30,10 +29,6 @@ const IndexPopup = () => {
       const fullPageDataUrl = await captureFullPageScreenshot()
       if (!fullPageDataUrl.match(/.*data\:/)) throw (fullPageDataUrl) // condition hack to detect content script exception
       const resultObj = JSON.parse(fullPageDataUrl)
-      // const fullPageDataUrl = await chrome.tabs.captureVisibleTab()
-      // const tabs = await chrome.tabs.query({ currentWindow: true, active: true })
-      // const t = tabs[0]
-      // const resultObj = { title: t.title, url: t.url, screenshotUrl: fullPageDataUrl }
       const div = document.createElement('div')
       div.innerHTML = `
       <details>
@@ -43,7 +38,9 @@ const IndexPopup = () => {
       </details>
       `
       await infiniteScroller.current.addNewTextBlob(null, div.outerHTML);
-      await generateDocx()
+
+      // Use setTimeout to allow the list of screenshots to re-render before setting a new download href
+      setTimeout(() => { generateDocx() }, 1000);
     } catch (error) {
       setHaveErrors(true)
       const err = error instanceof Error ? error : JSON.parse(error)
@@ -56,26 +53,16 @@ const IndexPopup = () => {
   const generateDocx = async () => {
     const buffer = await makeDoc('.infinite-scroller')
     // Use the buffer (e.g., save to file or send as response)
-    const blob = new Blob([buffer], { type: 'application/octet-binary' });
-    const link = document.querySelector('.downloadLink')
-    link.href = URL.createObjectURL(blob);
+    const blob = new Blob([buffer], { type: 'application/octet-binary' })
+    const link = document.querySelector('.downloadLink') as HTMLAnchorElement
+    link.href = URL.createObjectURL(blob)
     link.download = "filename.docx"; // Specify the desired filename
-    // link.style.display = 'none'; // Make it invisible but downloadable
-
-    // // Append to body and then remove
-    // document.body.appendChild(link);
-    // link.click();
-
-    // setTimeout(() => {
-    //   link.remove();
-    //   window.URL.revokeObjectURL(link.href); // Clean up
-    // }, 100);
   }
 
   return (
     <div>
       <a className="welcome" href={welcomeUrl} target="_blank">Welcome!</a>
-      <ExpanderButton className="settings" summary="">
+      <ExpanderButton className="settings" summary={""}>
         <div>Settings</div>
         <input value={selector} onChange={async (e) => setSelector(e.target.value)} />
         <details open>
