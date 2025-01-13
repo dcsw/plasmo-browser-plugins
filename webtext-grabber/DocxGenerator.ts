@@ -28,17 +28,32 @@ export const makeDoc = async (sel: string) => {
   // const availableWidth = pageWidth - margins;
   // const availableWidth = sectionPageSizeDefaults.WIDTH - sectionMarginDefaults.LEFT - sectionMarginDefaults.RIGHT
 
+  // const myPageSize = {
+  //   width: convertInchesToTwip(8.5),
+  //   height: convertInchesToTwip(11),
+  // }
+  // const myMarginSizes = {
+  //   top: convertInchesToTwip(1),
+  //   right: convertInchesToTwip(1),
+  //   bottom: convertInchesToTwip(1),
+  //   left: convertInchesToTwip(1),
+  // }
+  // const twips2emus = (t: number) => t * 635
+  
   const myPageSize = {
-    width: convertInchesToTwip(8.5),
-    height: convertInchesToTwip(11),
+    width: 8.5,
+    height: 11,
   }
   const myMarginSizes = {
-    top: convertInchesToTwip(1),
-    right: convertInchesToTwip(1),
-    bottom: convertInchesToTwip(1),
-    left: convertInchesToTwip(1),
+    top: 1,
+    right: 1,
+    bottom: 1,
+    left: 1,
   }
+  const inches2emus = (i: number) => i * 914400
   const availableWidth = myPageSize.width - myMarginSizes.left - myMarginSizes.right
+  const w = Math.round(inches2emus(availableWidth))
+
   o.sections.push({
     properties: {
       page: {
@@ -54,6 +69,8 @@ export const makeDoc = async (sel: string) => {
         text: titles[i],
         heading: level
       }))
+    const imgAR = widths[i]/heights[i]
+    const h = w / imgAR
     o.sections[0].children.push(
       new Paragraph({
         alignment: alignment,
@@ -70,10 +87,10 @@ export const makeDoc = async (sel: string) => {
           new ImageRun({
             data: Buffer.from(screenShotImgUrls[i].split(',')[1], 'base64'),
             transformation: {
-              // width: availableWidth, // widths[i],
-              // height: availableWidth * heights[i] / widths[i] // preserve aspect ratio
               width: widths[i],
               height: heights[i]
+              // width: w,
+              // height: h
             }
           })]
       }))
