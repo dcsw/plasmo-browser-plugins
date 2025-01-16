@@ -40,7 +40,7 @@ const IndexPopup = () => {
       await infiniteScroller.current.addNewTextBlob(null, div.outerHTML);
 
       // Use setTimeout to allow the list of screenshots to re-render before setting a new download href
-      setTimeout(() => { generateDocx() }, 1000);
+      setTimeout(() => { generateDocx() }, 0);
     } catch (error) {
       setHaveErrors(true)
       const err = error instanceof Error ? error : JSON.parse(error)
