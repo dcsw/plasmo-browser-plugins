@@ -1,5 +1,5 @@
 import {
-  Document, Packer, Paragraph, TextRun, ExternalHyperlink, ImageRun, HeadingLevel, AlignmentType, convertInchesToTwip, HeightRule
+  Document, Packer, Paragraph, TextRun, ExternalHyperlink, ImageRun, HeadingLevel, AlignmentType, convertInchesToTwip
 } from 'docx';
 
 export const makeDoc = async (sel: string) => {
@@ -66,10 +66,8 @@ export const makeDoc = async (sel: string) => {
               })
             ],
             link: linkUrls[i]
-          })
-        ]
+          })]
       }))
-
     o.sections[0].children.push(
       new Paragraph({
         alignment: alignment,
@@ -80,8 +78,7 @@ export const makeDoc = async (sel: string) => {
               width: w,
               height: h
             }
-          })
-        ]
+          })]
       }))
   }
   const doc = new Document(o)
