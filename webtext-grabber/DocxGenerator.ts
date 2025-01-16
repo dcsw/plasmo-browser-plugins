@@ -16,32 +16,10 @@ export const makeDoc = async (sel: string) => {
   const heights = items.map(i => i.querySelector('img').clientHeight)
   const widths = items.map(i => i.querySelector('img').clientWidth)
 
-  // const level: HeadingLevel = HeadingLevel.HEADING_1
   const level = HeadingLevel.HEADING_2
-  // const alignment: AlignmentType = AlignmentType.LEFT
   const alignment = AlignmentType.LEFT
-
-  // Calculate available width (in twips)
-  // const pageWidth = convertInchesToTwip(sectionPageSizeDefaults.WIDTH);
-  // const pageWidth = sectionPageSizeDefaults.WIDTH;
-  // const margins = convertInchesToTwip(2); // 1-inch margins on each side
-  // const availableWidth = pageWidth - margins;
-  // const availableWidth = sectionPageSizeDefaults.WIDTH - sectionMarginDefaults.LEFT - sectionMarginDefaults.RIGHT
-
-  // const myPageSize = {
-  //   width: convertInchesToTwip(8.5),
-  //   height: convertInchesToTwip(11),
-  // }
-  // const myMarginSizes = {
-  //   top: convertInchesToTwip(1),
-  //   right: convertInchesToTwip(1),
-  //   bottom: convertInchesToTwip(1),
-  //   left: convertInchesToTwip(1),
-  // }
-  // const twips2emus = (t: number) => t * 635
   
-  const myPageSize = {
-    width: 8.5,
+  const myPageSize = {    width: 8.5,
     height: 11,
   }
   const myMarginSizes = {
@@ -49,20 +27,30 @@ export const makeDoc = async (sel: string) => {
     right: 1,
     bottom: 1,
     left: 1,
+  }  
+  const pageSizeTWIPs = {
+    width: convertInchesToTwip(myPageSize.width),
+    height: convertInchesToTwip(myPageSize.height),
   }
-  const inches2emus = (i: number) => i * 914400
-  const availableWidth = myPageSize.width - myMarginSizes.left - myMarginSizes.right
-  const w = Math.round(inches2emus(availableWidth))
+  const marginSizesTWIPs = {
+    top: convertInchesToTwip(myMarginSizes.top),
+    right: convertInchesToTwip(myMarginSizes.right),
+    bottom: convertInchesToTwip(myMarginSizes.bottom),
+    left: convertInchesToTwip(myMarginSizes.left),
+  }
 
   o.sections.push({
     properties: {
       page: {
-        size: myPageSize,
-        margin: myMarginSizes,
+        size: pageSizeTWIPs,
+        margin: marginSizesTWIPs,
       },
     },
     children: []
   })
+
+  const availableWidth = myPageSize.width - myMarginSizes.left - myMarginSizes.right
+  const w = availableWidth*1044/10 // these TWIPs are 10ths of Imperial Points, which are 1044 PPI in a docx doc...apparently
   for (let i = 0; i < items.length; i++) {
     o.sections[0].children.push(
       new Paragraph({
@@ -70,7 +58,7 @@ export const makeDoc = async (sel: string) => {
         heading: level
       }))
     const imgAR = widths[i]/heights[i]
-    const h = w / imgAR
+    const h = ~~(w / imgAR)
     o.sections[0].children.push(
       new Paragraph({
         alignment: alignment,
@@ -87,10 +75,8 @@ export const makeDoc = async (sel: string) => {
           new ImageRun({
             data: Buffer.from(screenShotImgUrls[i].split(',')[1], 'base64'),
             transformation: {
-              width: widths[i],
-              height: heights[i]
-              // width: w,
-              // height: h
+              width: w,
+              height: h
             }
           })]
       }))
