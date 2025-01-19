@@ -1,6 +1,7 @@
 import {
   Document, Packer, Paragraph, TextRun, ExternalHyperlink, ImageRun, HeadingLevel, AlignmentType, convertInchesToTwip
 } from 'docx';
+import { createImageChunks } from "./createImageChunks"
 
 export const makeDoc = async (sel: string) => {
   let o = {
@@ -68,18 +69,22 @@ export const makeDoc = async (sel: string) => {
             link: linkUrls[i]
           })]
       }))
-    o.sections[0].children.push(
-      new Paragraph({
-        alignment: alignment,
-        children: [
-          new ImageRun({
-            data: Buffer.from(screenShotImgUrls[i].split(',')[1], 'base64'),
-            transformation: {
-              width: w,
-              height: h
-            }
-          })]
-      }))
+
+    const imgChunks = await createImageChunks(Buffer.from(screenShotImgUrls[i].split(',')[1], 'base64'), w, h, h/2, alignment)
+    o.sections[0].children.push(...imgChunks)
+
+    // o.sections[0].children.push(
+    //   new Paragraph({
+    //     alignment: alignment,
+    //     children: [
+    //       new ImageRun({
+    //         data: Buffer.from(screenShotImgUrls[i].split(',')[1], 'base64'),
+    //         transformation: {
+    //           width: w,
+    //           height: h
+    //         }
+    //       })]
+    //   }))
   }
   const doc = new Document(o)
   return await Packer.toBuffer(doc)
