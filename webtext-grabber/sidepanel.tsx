@@ -5,6 +5,14 @@ import 'assets/styles.css'
 import ExpanderButton from 'components/settings-expander'
 import { makeDoc } from './DocxGenerator';
 
+function showWaitCursor() {
+  document.documentElement.classList.add('wait-cursor');
+}
+
+function hideWaitCursor() {
+  document.documentElement.classList.remove('wait-cursor');
+}
+
 const IndexPopup = () => {
   const [selector, setSelector] = useState("html")
   const [welcomeUrl] = useState(`chrome-extension://${chrome.runtime.id}/tabs/welcome.html`)
@@ -26,6 +34,7 @@ const IndexPopup = () => {
 
     // Usage
     try {
+      showWaitCursor()
       const fullPageDataUrl = await captureFullPageScreenshot()
       if (!fullPageDataUrl.match(/.*data\:/)) throw (fullPageDataUrl) // condition hack to detect content script exception
       const resultObj = JSON.parse(fullPageDataUrl)
@@ -40,13 +49,15 @@ const IndexPopup = () => {
       await infiniteScroller.current.addNewTextBlob(null, div.outerHTML);
 
       // Use setTimeout to allow the list of screenshots to re-render before setting a new download href
-      setTimeout(() => { generateDocx() }, 0);
+      setTimeout(async () => { await generateDocx() }, 0);
     } catch (error) {
       setHaveErrors(true)
       const err = error instanceof Error ? error : JSON.parse(error)
       const errorDiv = document.createElement('div')
       errorDiv.innerText = err.stack
       errorScroller.current.addNewTextBlob("Error", errorDiv.outerHTML);
+    } finally {
+      hideWaitCursor()
     }
   }
 

@@ -15,10 +15,11 @@ export async function createImageChunks(
 
     const chunkHeight = Math.min(pageHeight, image.bitmap.height);
 
-    for (let y = 0; y < image.bitmap.height; y += chunkHeight) {
+    let heightToCrop = 0
+    for (let y = 0; y < image.bitmap.height; y += heightToCrop) {
         // Ensure we do not exceed image dimensions
         const widthToCrop = Math.min(pageWidth, image.bitmap.width)
-        const heightToCrop = Math.min(chunkHeight, image.bitmap.height - y);
+        heightToCrop = y === 0 ? initialPageHeight : Math.min(chunkHeight, image.bitmap.height - y);
 
         // Ensure valid cropping parameters
         if (heightToCrop > 0) {
@@ -35,7 +36,7 @@ export async function createImageChunks(
                             transformation: {
                                 width: widthToCrop,
                                 height: heightToCrop,
-                            },
+                            }
                         })]
                 }));
         }
