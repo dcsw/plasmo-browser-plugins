@@ -1,20 +1,26 @@
 import React, { useState } from 'react';
 import gearIcon from '../assets/gear.svg';  // Adjust this path as needed
 
-const ExpanderButton = ({ children, summary = "Expand" }) => {
-    const [isExpanded, setIsExpanded] = useState(false);
+interface ExpanderButtonProps {
+  children?: React.ReactNode;
+  className?: string;
+  summary?: string;
+}
 
-    const handleToggle = (e) => {
-        setIsExpanded(e.target.open);
-    };
+const ExpanderButton = ({ children, className, summary = "Expand" }: ExpanderButtonProps) => {
+  const [isExpanded, setIsExpanded] = useState(false);
 
-    return (
-    <details onToggle={handleToggle}>
-    
+  const handleToggle = (e) => {
+    setIsExpanded(e.target.open);
+  };
+
+  return (
+    <details className={className} onToggle={handleToggle}>
+
       <summary className="expander-button">
         <span>{summary}</span>
-        <img 
-          src={gearIcon} 
+        <img
+          src={gearIcon}
           alt={summary}
           className={`icon ${isExpanded ? 'expanded' : ''}`}
         />
@@ -23,7 +29,7 @@ const ExpanderButton = ({ children, summary = "Expand" }) => {
         {children}
       </div>
     </details>
-    );
+  );
 };
 
 export default ExpanderButton;
