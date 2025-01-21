@@ -36,7 +36,7 @@ export async function createImageChunks(
                             transformation: {
                                 width: widthToCrop,
                                 height: heightToCrop,
-                            },
+                            }
                         })]
                 }));
         }

@@ -28,10 +28,9 @@ const captureFullPage = async (selector: string) => {
   const element: HTMLElement = document.querySelector(selector);
   if (element) {
     const canvas = await html2canvas(element, {
-      // width: window.outerWidth,
-      // height: window.outerHeight,
-      // width: document.documentElement.clientWidth,
-      // height: document.documentElement.clientHeight,
+      // windowWidth: window.outerWidth,
+      // windowHeight: window.outerHeight,
+      // scale: 1,
       allowTaint: true,
       logging: true,
       useCORS: true,

@@ -54,3 +54,7 @@ details[open] .icon {
 .downloadLink[href] { 
   display: inline;
 }
+
+.wait-cursor, .wait-cursor * {
+  cursor: wait !important;
+}
