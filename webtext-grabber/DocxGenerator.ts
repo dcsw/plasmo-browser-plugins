@@ -1,6 +1,4 @@
-import {
-  Document, Packer, Paragraph, TextRun, ExternalHyperlink, ImageRun, HeadingLevel, AlignmentType, convertInchesToTwip
-} from 'docx';
+import { Document, Packer, Paragraph, TextRun, ExternalHyperlink, HeadingLevel, AlignmentType, convertInchesToTwip, PageSize } from 'docx';
 import { createImageChunks } from "./createImageChunks"
 
 export const makeDoc = async (sel: string) => {
@@ -18,16 +16,9 @@ export const makeDoc = async (sel: string) => {
   const level = HeadingLevel.HEADING_2
   const alignment = AlignmentType.LEFT
 
-  const myPageSize = {
-    width: 8.5,
-    height: 11,
-  }
-  const myMarginSizes = {
-    top: 1,
-    right: 1,
-    bottom: 1,
-    left: 1,
-  }
+  const myPageSize = { width: 8.5, height: 11 }
+  const myMarginSizes = { top: 1, right: 1, bottom: 1, left: 1 }
+  const firstImageChunkHeight = 5
   const pageSizeTWIPs = {
     width: convertInchesToTwip(myPageSize.width),
     height: convertInchesToTwip(myPageSize.height),
@@ -71,7 +62,7 @@ export const makeDoc = async (sel: string) => {
           })]
       }))
 
-    const imgChunks = await createImageChunks(Buffer.from(screenShotImgUrls[i].split(',')[1], 'base64'), w, h, h / 2, alignment)
+    const imgChunks = await createImageChunks(Buffer.from(screenShotImgUrls[i].split(',')[1], 'base64'), w, h, myConvertInches2TWIPs(firstImageChunkHeight), alignment)
     o.sections[0].children.push(...imgChunks)
   }
   const doc = new Document(o)
