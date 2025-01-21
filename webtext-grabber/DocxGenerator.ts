@@ -49,11 +49,12 @@ export const makeDoc = async (sel: string) => {
     children: []
   })
 
+  const myConvertInches2TWIPs = (i) => i * 1044 / 10 // these TWIPs are 10ths of Imperial Points, which are 1044 PPI in a docx doc...apparently
   const availableWidth = myPageSize.width - myMarginSizes.left - myMarginSizes.right
-  const w = availableWidth * 1044 / 10 // these TWIPs are 10ths of Imperial Points, which are 1044 PPI in a docx doc...apparently
+  const w = myConvertInches2TWIPs(availableWidth)
+  const availablePageHeight = myPageSize.height - myMarginSizes.top - myMarginSizes.bottom
+  const h = myConvertInches2TWIPs(availablePageHeight)
   for (let i = 0; i < items.length; i++) {
-    const imgAR = widths[i] / heights[i]
-    const h = ~~(w / imgAR)
     o.sections[0].children.push(
       new Paragraph({
         heading: level,
@@ -70,21 +71,8 @@ export const makeDoc = async (sel: string) => {
           })]
       }))
 
-    const imgChunks = await createImageChunks(Buffer.from(screenShotImgUrls[i].split(',')[1], 'base64'), w, h, h/2, alignment)
+    const imgChunks = await createImageChunks(Buffer.from(screenShotImgUrls[i].split(',')[1], 'base64'), w, h, h / 2, alignment)
     o.sections[0].children.push(...imgChunks)
-
-    // o.sections[0].children.push(
-    //   new Paragraph({
-    //     alignment: alignment,
-    //     children: [
-    //       new ImageRun({
-    //         data: Buffer.from(screenShotImgUrls[i].split(',')[1], 'base64'),
-    //         transformation: {
-    //           width: w,
-    //           height: h
-    //         }
-    //       })]
-    //   }))
   }
   const doc = new Document(o)
   return await Packer.toBuffer(doc)
