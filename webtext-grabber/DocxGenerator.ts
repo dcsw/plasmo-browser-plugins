@@ -21,21 +21,21 @@ export const makeDoc = async (sel: string) => {
   const firstImageChunkHeight = 5
   const pageSizeTWIPs = {
     width: convertInchesToTwip(myPageSize.width),
-    height: convertInchesToTwip(myPageSize.height),
+    height: convertInchesToTwip(myPageSize.height)
   }
   const marginSizesTWIPs = {
     top: convertInchesToTwip(myMarginSizes.top),
     right: convertInchesToTwip(myMarginSizes.right),
     bottom: convertInchesToTwip(myMarginSizes.bottom),
-    left: convertInchesToTwip(myMarginSizes.left),
+    left: convertInchesToTwip(myMarginSizes.left)
   }
 
   o.sections.push({
     properties: {
       page: {
         size: pageSizeTWIPs,
-        margin: marginSizesTWIPs,
-      },
+        margin: marginSizesTWIPs
+      }
     },
     children: []
   })
