@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react"
 import { type PlasmoMessaging, sendToContentScript, sendToBackground } from "@plasmohq/messaging"
 import { InfiniteScroller } from "components/infinite-scroller"
+import { Carousel } from 'components/carousel'
 import 'assets/styles.css'
 import ExpanderButton from 'components/settings-expander'
 import { makeDoc } from './DocxGenerator';
@@ -17,6 +18,7 @@ const IndexPopup = () => {
   const [selector, setSelector] = useState("html")
   const [welcomeUrl] = useState(`chrome-extension://${chrome.runtime.id}/tabs/welcome.html`)
   const infiniteScroller = useRef(null)
+  const carousel = useRef(null)
   const errorScroller = useRef(null)
   const [haveErrors, setHaveErrors] = useState(false)
 
@@ -38,15 +40,8 @@ const IndexPopup = () => {
       const fullPageDataUrl = await captureFullPageScreenshot()
       if (!fullPageDataUrl.match(/.*data\:/)) throw (fullPageDataUrl) // condition hack to detect content script exception
       const resultObj = JSON.parse(fullPageDataUrl)
-      const div = document.createElement('div')
-      div.innerHTML = `
-      <details>
-        <summary>${resultObj.title}</summary>
-        <a href=${resultObj.url} target="_blank">${resultObj.title}</a>
-        <img src="${resultObj.screenshotUrl}"/>
-      </details>
-      `
-      await infiniteScroller.current.addNewTextBlob(null, div.outerHTML);
+      // await infiniteScroller.current.addNewTextBlob(resultObj);
+      await carousel.current.addNewTextBlob(resultObj);
 
       // Use setTimeout to allow the list of screenshots to re-render before setting a new download href
       setTimeout(async () => { await generateDocx() }, 0);
@@ -88,7 +83,8 @@ const IndexPopup = () => {
       </button>
       <a className="downloadLink">Download Document</a>
       <br />
-      <InfiniteScroller ref={infiniteScroller}></InfiniteScroller>
+      {/* <InfiniteScroller ref={infiniteScroller}></InfiniteScroller> */}
+      <Carousel ref={carousel}></Carousel>
     </div >
   )
 }
