@@ -1,14 +1,14 @@
 import React, { useState, useRef, useImperativeHandle, forwardRef, useCallback } from 'react'
-import { EffectCoverflow, Navigation, Pagination, Scrollbar, A11y, FreeMode, Thumbs } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
-
 // Import Swiper styles
 import 'swiper/css'
 import 'swiper/css/effect-coverflow';
+import 'swiper/css/free-mode';
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import 'swiper/css/scrollbar'
 import 'swiper/css/thumbs';
+import { Parallax, EffectCoverflow, Navigation, Pagination, Scrollbar, Mousewheel, A11y, FreeMode, Thumbs } from 'swiper/modules'
 
 import './carousel.css'
 
@@ -72,6 +72,9 @@ export const Carousel = forwardRef((props, ref) => {
           '--swiper-pagination-color': '#fff',
         }}
         effect={'coverflow'}
+        parallax={true}
+        freeMode={true}
+        scrollbar={true}
         grabCursor={true}
         centeredSlides={true}
         slidesPerView={'auto'}
@@ -89,7 +92,7 @@ export const Carousel = forwardRef((props, ref) => {
         spaceBetween={10}
         navigation={true}
         thumbs={{ swiper: thumbsSwiper }}
-        modules={[EffectCoverflow, FreeMode, Navigation, Thumbs]}
+        modules={[Parallax, Scrollbar, EffectCoverflow, FreeMode, Navigation, Thumbs]}
         className="mySwiperMainView item"
       >{childrenImages}</Swiper>
     </div>
