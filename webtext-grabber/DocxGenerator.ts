@@ -6,9 +6,9 @@ export const makeDoc = async (sel: string) => {
     sections: []
   }
 
-  const items = Array.from(document.querySelectorAll(sel + ' > .item'))
+  const items = Array.from(document.querySelectorAll(sel + ' .item'))
   const linkUrls = items.map(i => i.querySelector('a').href)
-  const linkTexts = items.map(i => i.querySelector('a').textContent)
+  const linkTexts = items.map(i => i.querySelector('a').title)
   const screenShotImgUrls = items.map(i => i.querySelector('img').src)
   const heights = items.map(i => i.querySelector('img').clientHeight)
   const widths = items.map(i => i.querySelector('img').clientWidth)
