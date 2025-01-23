@@ -57,7 +57,7 @@ const IndexPopup = () => {
   }
 
   const generateDocx = async () => {
-    const buffer = await makeDoc('.infinite-scroller')
+    const buffer = await makeDoc('.mySwiperMainView')
     // Use the buffer (e.g., save to file or send as response)
     const blob = new Blob([buffer], { type: 'application/octet-binary' })
     const link = document.querySelector('.downloadLink') as HTMLAnchorElement
