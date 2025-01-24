@@ -17,10 +17,11 @@ function hideWaitCursor() {
 const IndexPopup = () => {
   const [selector, setSelector] = useState("html")
   const [welcomeUrl] = useState(`chrome-extension://${chrome.runtime.id}/tabs/welcome.html`)
-  const infiniteScroller = useRef(null)
   const carousel = useRef(null)
   const errorScroller = useRef(null)
   const [haveErrors, setHaveErrors] = useState(false)
+  const [downloadHref, setDownloadHref] = useState(null)
+  const [newData, setNewData] = useState(false)
 
   const screenShotPage = async () => {
     const captureFullPageScreenshot = async (): Promise<string> => {
@@ -40,11 +41,12 @@ const IndexPopup = () => {
       const fullPageDataUrl = await captureFullPageScreenshot()
       if (!fullPageDataUrl.match(/.*data\:/)) throw (fullPageDataUrl) // condition hack to detect content script exception
       const resultObj = JSON.parse(fullPageDataUrl)
-      // await infiniteScroller.current.addNewTextBlob(resultObj);
       await carousel.current.addNewTextBlob(resultObj);
 
       // Use setTimeout to allow the list of screenshots to re-render before setting a new download href
-      setTimeout(async () => { await generateDocx() }, 0);
+      // setTimeout(async () => { await generateDocx() }, 0);
+      setNewData(true)
+      setDownloadHref("")
     } catch (error) {
       setHaveErrors(true)
       const err = error instanceof Error ? error : JSON.parse(error)
@@ -56,13 +58,23 @@ const IndexPopup = () => {
     }
   }
 
-  const generateDocx = async () => {
-    const buffer = await makeDoc('.mySwiperMainView')
-    // Use the buffer (e.g., save to file or send as response)
-    const blob = new Blob([buffer], { type: 'application/octet-binary' })
-    const link = document.querySelector('.downloadLink') as HTMLAnchorElement
-    link.href = URL.createObjectURL(blob)
-    link.download = "filename.docx"; // Specify the desired filename
+  const generateDocx = async (e) => {
+    if (newData) {
+      e.preventDefault()
+      const buffer = await makeDoc('.mySwiperMainView')
+      // Use the buffer (e.g., save to file or send as response)
+      const blob = new Blob([buffer], { type: 'application/octet-binary' })
+      // const link = document.querySelector('.downloadLink') as HTMLAnchorElement
+      // link.href = URL.createObjectURL(blob)
+      // link.download = "filename.docx"; // Specify the desired filename
+      setDownloadHref(URL.createObjectURL(blob))
+      setNewData(false)
+      // Click the link after React updates its href
+      setTimeout(() => {
+        const link = document.querySelector('.downloadLink') as HTMLAnchorElement
+        link.click()
+      }, 0);
+    }
   }
 
   return (
@@ -81,9 +93,8 @@ const IndexPopup = () => {
         onClick={screenShotPage}>
         Capture Web Page
       </button>
-      <a className="downloadLink">Download Document</a>
+      <a className="downloadLink" href={downloadHref} onClick={generateDocx} download="filename.docx">Download Document</a>
       <br />
-      {/* <InfiniteScroller ref={infiniteScroller}></InfiniteScroller> */}
       <Carousel ref={carousel}></Carousel>
     </div >
   )
