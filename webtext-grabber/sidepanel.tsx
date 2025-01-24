@@ -22,6 +22,7 @@ const IndexPopup = () => {
   const [haveErrors, setHaveErrors] = useState(false)
   const [downloadHref, setDownloadHref] = useState(null)
   const [newData, setNewData] = useState(false)
+  const [filename, setFilename] = useState("filename.docx")
 
   const screenShotPage = async () => {
     const captureFullPageScreenshot = async (): Promise<string> => {
@@ -62,11 +63,7 @@ const IndexPopup = () => {
     if (newData) {
       e.preventDefault()
       const buffer = await makeDoc('.mySwiperMainView')
-      // Use the buffer (e.g., save to file or send as response)
       const blob = new Blob([buffer], { type: 'application/octet-binary' })
-      // const link = document.querySelector('.downloadLink') as HTMLAnchorElement
-      // link.href = URL.createObjectURL(blob)
-      // link.download = "filename.docx"; // Specify the desired filename
       setDownloadHref(URL.createObjectURL(blob))
       setNewData(false)
       // Click the link after React updates its href
@@ -93,7 +90,7 @@ const IndexPopup = () => {
         onClick={screenShotPage}>
         Capture Web Page
       </button>
-      <a className="downloadLink" href={downloadHref} onClick={generateDocx} download="filename.docx">Download Document</a>
+      <a className="downloadLink" href={downloadHref} onClick={generateDocx} download={filename}>Download Document</a>
       <br />
       <Carousel ref={carousel}></Carousel>
     </div >
