@@ -92,7 +92,7 @@ const IndexPopup = () => {
   }
 
   return (
-    <div>
+    <div className="bg-image">
       <a className="welcome" href={welcomeUrl} target="_blank">Welcome!</a>
       <ExpanderButton className="settings" summary={""}>
         <div>Settings</div>
