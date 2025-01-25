@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import gearIcon from '../assets/gear.svg';  // Adjust this path as needed
+import { CiSettings } from "react-icons/ci"
 
 interface ExpanderButtonProps {
   children?: React.ReactNode;
@@ -19,8 +19,7 @@ const ExpanderButton = ({ children, className, summary = "Expand" }: ExpanderBut
 
       <summary className="expander-button">
         <span>{summary}</span>
-        <img
-          src={gearIcon}
+        <CiSettings
           alt={summary}
           className={`icon ${isExpanded ? 'expanded' : ''}`}
         />

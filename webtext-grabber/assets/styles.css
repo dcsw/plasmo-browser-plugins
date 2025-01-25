@@ -26,7 +26,7 @@
   width: 16px;
   height: 16px;
   transition: transform 0.3s ease;
-  margin-right: 8%;
+  /* margin-right: 8%; */
 }
 
 details[open] .icon {
@@ -58,3 +58,25 @@ details[open] .icon {
 .wait-cursor, .wait-cursor * {
   cursor: wait !important;
 }
+
+.capture, .multiCapture, .download, .share {
+  height: 2.25em;
+  width: 2.5em;
+  vertical-align: top;
+  color: #444;
+}
+
+.download, .share {
+  float: right;
+}
+
+.hidden {
+  visibility: hidden;
+}
+:not(.hidden) {
+  visibility: visible;
+}
+
+/* .settings {
+  float: right;
+} */

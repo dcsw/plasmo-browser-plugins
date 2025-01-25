@@ -1,10 +1,15 @@
 import React, { useState, useRef } from "react"
 import { type PlasmoMessaging, sendToContentScript, sendToBackground } from "@plasmohq/messaging"
+import { CiSettings } from "react-icons/ci"
+import { RiCameraLine } from "react-icons/ri"
+import { RiCameraAiLine } from "react-icons/ri"
+import { HiOutlineDocumentDownload } from "react-icons/hi"
+import { GoShare } from "react-icons/go"
 import { InfiniteScroller } from "components/infinite-scroller"
 import { Carousel } from 'components/carousel'
-import 'assets/styles.css'
 import ExpanderButton from 'components/settings-expander'
 import { makeDoc } from './DocxGenerator';
+import 'assets/styles.css'
 
 function showWaitCursor() {
   document.documentElement.classList.add('wait-cursor');
@@ -21,6 +26,8 @@ const IndexPopup = () => {
   const errorScroller = useRef(null)
   const [haveErrors, setHaveErrors] = useState(false)
   const [downloadHref, setDownloadHref] = useState(null)
+  const [downloadRef] = useState(null)
+  const [shareRef] = useState(null)
   const [newData, setNewData] = useState(false)
   const [filename, setFilename] = useState("filename.docx")
 
@@ -48,6 +55,8 @@ const IndexPopup = () => {
       // setTimeout(async () => { await generateDocx() }, 0);
       setNewData(true)
       setDownloadHref("")
+      downloadRef.classList.remove('hidden')
+      shareRef.classList.remove('hidden')
     } catch (error) {
       setHaveErrors(true)
       const err = error instanceof Error ? error : JSON.parse(error)
@@ -57,6 +66,14 @@ const IndexPopup = () => {
     } finally {
       hideWaitCursor()
     }
+  }
+
+  const multiShotPage = async () => {
+    alert("Multishot not implemented...yet.")
+  }
+
+  const share = async () => {
+    alert("Share not implemented...yet.")
   }
 
   const generateDocx = async (e) => {
@@ -86,12 +103,18 @@ const IndexPopup = () => {
         </details>
       </ExpanderButton>
 
-      <button
-        onClick={screenShotPage}>
-        Capture Web Page
-      </button>
-      <a className="downloadLink" href={downloadHref} onClick={generateDocx} download={filename}>Download Document</a>
-      <br />
+      <RiCameraLine className="capture" onClick={screenShotPage} />
+      <RiCameraAiLine className="multiCapture" onClick={multiShotPage} />
+
+      {
+        downloadHref !== null &&
+        <span>
+          <GoShare className="share" onClick={share} />
+          <a className="downloadLink" ref={downloadRef} href={downloadHref} onClick={generateDocx} download={filename}>
+            <HiOutlineDocumentDownload className="download" />
+          </a>
+        </span>
+      }
       <Carousel ref={carousel}></Carousel>
     </div >
   )
