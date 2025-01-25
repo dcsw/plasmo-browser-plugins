@@ -109,10 +109,10 @@ const IndexPopup = () => {
       { // show when there is data
         downloadHref !== null &&
         <span>
-          <GoShare className="share" onClick={share} />
           <a className="downloadLink" ref={downloadRef} href={downloadHref} onClick={generateDocx} download={filename}>
             <HiOutlineDocumentDownload className="download" />
           </a>
+          <GoShare className="share" onClick={share} />
         </span>
       }
       <Carousel ref={carousel}></Carousel>
