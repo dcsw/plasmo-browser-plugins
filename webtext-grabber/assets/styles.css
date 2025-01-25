@@ -77,6 +77,10 @@ details[open] .icon {
   visibility: visible;
 }
 
-/* .settings {
-  float: right;
-} */
+.bg-image {
+  background-image: url('/assets/duxbury-bridge-background.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 600px;
+  width: 100%;
+}
