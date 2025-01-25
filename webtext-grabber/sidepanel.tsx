@@ -106,7 +106,7 @@ const IndexPopup = () => {
       <RiCameraLine className="capture" onClick={screenShotPage} />
       <RiCameraAiLine className="multiCapture" onClick={multiShotPage} />
 
-      {
+      { // show when there is data
         downloadHref !== null &&
         <span>
           <GoShare className="share" onClick={share} />
