@@ -1,10 +1,10 @@
 import React, { useState, useRef } from "react"
 import { type PlasmoMessaging, sendToContentScript, sendToBackground } from "@plasmohq/messaging"
-import { CiSettings } from "react-icons/ci"
 import { RiCameraLine } from "react-icons/ri"
 import { RiCameraAiLine } from "react-icons/ri"
 import { HiOutlineDocumentDownload } from "react-icons/hi"
 import { GoShare } from "react-icons/go"
+import { ImNext } from "react-icons/im";
 import { InfiniteScroller } from "components/infinite-scroller"
 import { Carousel } from 'components/carousel'
 import ExpanderButton from 'components/settings-expander'
@@ -21,6 +21,7 @@ function hideWaitCursor() {
 
 const IndexPopup = () => {
   const [selector, setSelector] = useState("html")
+  const [nextSelector, setNextSelector] = useState("")
   const [welcomeUrl] = useState(`chrome-extension://${chrome.runtime.id}/tabs/welcome.html`)
   const carousel = useRef(null)
   const errorScroller = useRef(null)
@@ -76,6 +77,18 @@ const IndexPopup = () => {
     alert("Share not implemented...yet.")
   }
 
+  const getNextSelector = async () => {
+    const captureNextSelector = async (): Promise<string> => {
+      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
+      return await sendToContentScript({
+        name: "selectPageElement",
+        tabId: tab.id
+      });
+    }
+    alert("Get Next Selector not implemented...yet.")
+    const {selNext: selector, html: html } = await captureNextSelector()
+  }
+
   const generateDocx = async (e) => {
     if (newData) {
       e.preventDefault()
@@ -97,6 +110,10 @@ const IndexPopup = () => {
       <ExpanderButton className="settings" summary={""}>
         <div>Settings</div>
         <input value={selector} onChange={async (e) => setSelector(e.target.value)} />
+        <br />
+        <ImNext onClick={getNextSelector} />
+        <input value={nextSelector} onChange={async (e) => setNextSelector(e.target.value)} />
+
         <details open>
           <summary className={`${'errors' + (haveErrors ? ' some' : ' none')}`}>Errors</summary>
           <InfiniteScroller ref={errorScroller}></InfiniteScroller>
