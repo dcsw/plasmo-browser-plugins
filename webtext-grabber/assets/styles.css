@@ -84,3 +84,8 @@ details[open] .icon {
   height: 600px;
   width: 100%;
 }
+
+.nextSelector {
+  width: 1.5em;
+  vertical-align: middle;
+}

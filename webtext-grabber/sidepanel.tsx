@@ -11,11 +11,11 @@ import ExpanderButton from 'components/settings-expander'
 import { makeDoc } from './DocxGenerator';
 import 'assets/styles.css'
 
-function showWaitCursor() {
+const showWaitCursor = () => {
   document.documentElement.classList.add('wait-cursor');
 }
 
-function hideWaitCursor() {
+const hideWaitCursor = () => {
   document.documentElement.classList.remove('wait-cursor');
 }
 
@@ -78,15 +78,29 @@ const IndexPopup = () => {
   }
 
   const getNextSelector = async () => {
-    const captureNextSelector = async (): Promise<string> => {
+    const captureNextSelector = async (): Promise<any> => {
       const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
       return await sendToContentScript({
         name: "selectPageElement",
-        tabId: tab.id
+        tabId: tab.id,
       });
     }
-    alert("Get Next Selector not implemented...yet.")
-    const {selNext: selector, html: html } = await captureNextSelector()
+
+    try {
+      showWaitCursor()
+      const str = await captureNextSelector()
+      const o = JSON.parse(str)
+      console.log(o)
+      setNextSelector(o.selNext)
+    } catch (error) {
+      setHaveErrors(true)
+      const err = error instanceof Error ? error : JSON.parse(error)
+      const errorDiv = document.createElement('div')
+      errorDiv.innerText = err.stack
+      errorScroller.current.addNewTextBlob("Error", errorDiv.outerHTML);
+    } finally {
+      hideWaitCursor()
+    }
   }
 
   const generateDocx = async (e) => {
@@ -111,8 +125,8 @@ const IndexPopup = () => {
         <div>Settings</div>
         <input value={selector} onChange={async (e) => setSelector(e.target.value)} />
         <br />
-        <ImNext onClick={getNextSelector} />
-        <input value={nextSelector} onChange={async (e) => setNextSelector(e.target.value)} />
+        <ImNext className="nextSelector" onClick={getNextSelector} />
+        <input value={nextSelector} onChange={async (e) => setNextSelector(e.target.value)}/>
 
         <details open>
           <summary className={`${'errors' + (haveErrors ? ' some' : ' none')}`}>Errors</summary>
