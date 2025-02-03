@@ -20,7 +20,7 @@ const hideWaitCursor = () => {
 }
 
 const IndexPopup = () => {
-  const [selector, setSelector] = useState("html")
+  const [selScreenShot, setSelScreenShot] = useState("html")
   const [nextSelector, setNextSelector] = useState("")
   const [welcomeUrl] = useState(`chrome-extension://${chrome.runtime.id}/tabs/welcome.html`)
   const carousel = useRef(null)
@@ -39,7 +39,7 @@ const IndexPopup = () => {
         name: "screenCapture-html2canvas",
         tabId: tab.id,
         body: {
-          selector: selector
+          selector: selScreenShot
         }
       });
     }
@@ -77,18 +77,36 @@ const IndexPopup = () => {
     alert("Share not implemented...yet.")
   }
 
-  const getNextSelector = async () => {
-    const captureNextSelector = async (): Promise<any> => {
-      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
-      return await sendToContentScript({
-        name: "selectPageElement",
-        tabId: tab.id,
-      });
-    }
+  const captureSelector = async (): Promise<any> => {
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
+    return await sendToContentScript({
+      name: "selectPageElement",
+      tabId: tab.id,
+    });
+  }
 
+  const getScreenShotSelector = async () => {
     try {
       showWaitCursor()
-      const str = await captureNextSelector()
+      const str = await captureSelector()
+      const o = JSON.parse(str)
+      console.log(o)
+      setSelScreenShot(o.selNext)
+    } catch (error) {
+      setHaveErrors(true)
+      const err = error instanceof Error ? error : JSON.parse(error)
+      const errorDiv = document.createElement('div')
+      errorDiv.innerText = err.stack
+      errorScroller.current.addNewTextBlob("Error", errorDiv.outerHTML);
+    } finally {
+      hideWaitCursor()
+    }
+  }
+
+  const getNextSelector = async () => {
+    try {
+      showWaitCursor()
+      const str = await captureSelector()
       const o = JSON.parse(str)
       console.log(o)
       setNextSelector(o.selNext)
@@ -123,10 +141,12 @@ const IndexPopup = () => {
       <a className="welcome" href={welcomeUrl} target="_blank">Welcome!</a>
       <ExpanderButton className="settings" summary={""}>
         <div>Settings</div>
-        <input value={selector} onChange={async (e) => setSelector(e.target.value)} />
         <br />
-        <ImNext className="nextSelector" onClick={getNextSelector} />
-        <input value={nextSelector} onChange={async (e) => setNextSelector(e.target.value)}/>
+        <ImNext className="getSelector" onClick={getScreenShotSelector} />
+        <input value={selScreenShot} onChange={async (e) => setSelScreenShot(e.target.value)} />
+        <br />
+        <ImNext className="getSelector" onClick={getNextSelector} />
+        <input value={nextSelector} onChange={async (e) => setNextSelector(e.target.value)} />
 
         <details open>
           <summary className={`${'errors' + (haveErrors ? ' some' : ' none')}`}>Errors</summary>

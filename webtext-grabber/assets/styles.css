@@ -85,7 +85,8 @@ details[open] .icon {
   width: 100%;
 }
 
-.nextSelector {
+.getSelector {
+  margin-right: 0.25em;
   width: 1.5em;
   vertical-align: middle;
 }

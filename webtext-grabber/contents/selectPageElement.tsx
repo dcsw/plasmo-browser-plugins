@@ -55,7 +55,7 @@ const selectPageElement = () => {
   // Function for adding a purple bounding box around elements 
   const highlightNodes = (node: Node | null = document.body) => {
     if (node === null || !(node instanceof HTMLElement)) return;
-    node.style.outline = "5px solid purple";
+    node.style.outline = "2px solid purple";
   }
 
   // Function to remove the existing bounding box  
