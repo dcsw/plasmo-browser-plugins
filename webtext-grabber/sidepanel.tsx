@@ -1,14 +1,14 @@
 import React, { useState, useRef } from "react"
 import { type PlasmoMessaging, sendToContentScript, sendToBackground } from "@plasmohq/messaging"
-import { RiCameraLine } from "react-icons/ri"
-import { RiCameraAiLine } from "react-icons/ri"
+import { RiCameraLine, RiCameraAiLine } from "react-icons/ri"
 import { HiOutlineDocumentDownload } from "react-icons/hi"
 import { GoShare } from "react-icons/go"
-import { ImNext } from "react-icons/im";
+import { ImNext } from "react-icons/im"
+import { TiDeleteOutline } from 'react-icons/ti'
 import { InfiniteScroller } from "components/infinite-scroller"
 import { Carousel } from 'components/carousel'
 import ExpanderButton from 'components/settings-expander'
-import { makeDoc } from './DocxGenerator';
+import { makeDoc } from './DocxGenerator'
 import 'assets/styles.css'
 
 const showWaitCursor = () => {
@@ -142,11 +142,17 @@ const IndexPopup = () => {
       <ExpanderButton className="settings" summary={""}>
         <div>Settings</div>
         <br />
-        <ImNext className="getSelector" onClick={getScreenShotSelector} />
-        <input value={selScreenShot} onChange={async (e) => setSelScreenShot(e.target.value)} />
+        <div className="inputContainer"> {/* New container for input and delete icon */}
+          <ImNext className="getSelector" onClick={getScreenShotSelector} />
+          <input value={selScreenShot} onChange={async (e) => setSelScreenShot(e.target.value)}></input>
+          <TiDeleteOutline className="deleteIcon" onClick={() => setSelScreenShot("")} /> {/* Inside the flex container */}
+        </div>
         <br />
-        <ImNext className="getSelector" onClick={getNextSelector} />
-        <input value={nextSelector} onChange={async (e) => setNextSelector(e.target.value)} />
+        <div className="inputContainer"> {/* New container for input and delete icon */}
+          <ImNext className="getSelector" onClick={getNextSelector} />
+          <input value={nextSelector} onChange={async (e) => setNextSelector(e.target.value)} />
+          <TiDeleteOutline className="deleteIcon" onClick={() => setNextSelector("")} /> {/* Inside the flex container */}
+        </div>
 
         <details open>
           <summary className={`${'errors' + (haveErrors ? ' some' : ' none')}`}>Errors</summary>
