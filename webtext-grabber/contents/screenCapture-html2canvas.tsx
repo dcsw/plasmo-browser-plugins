@@ -15,7 +15,7 @@ const screenCapture = () => {
       try {
         const dataUrl = await captureFullPage(req.body.selector)
         // const dataUrl = await chrome.tabCapture()
-        if (!dataUrl.match(/^data\:/)) throw new Error("Error: ", dataUrl);
+        if (!dataUrl.match(/^data\:/)) throw new Error("Error: " + dataUrl);
         res.send(JSON.stringify({ url: document.location.href, title: document.title, screenshotUrl: dataUrl }))
       } catch (error) {
         res.send(JSON.stringify(error))
