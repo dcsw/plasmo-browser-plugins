@@ -20,13 +20,14 @@ export const Carousel = forwardRef((props, ref) => {
 
   useImperativeHandle(ref, () => ({
     addNewTextBlob: (item) => {
-      setItems((prevItems) => [...prevItems, item]);
+      setItems((prevItems) => 
+        [...prevItems, item])
     },
     items: items
   }))
 
   const childrenThumbs = items.map((item, index) => (
-    <SwiperSlide className="item">
+    <SwiperSlide className="item" key={index}>
       <a title={item.title}>
         <img
           src={item.screenshotUrl}
@@ -38,7 +39,7 @@ export const Carousel = forwardRef((props, ref) => {
     </SwiperSlide>
   ))
   const childrenImages = items.map((item, index) => (
-    <SwiperSlide className="item">
+    <SwiperSlide className="item" key={index}>
       <a title={item.title} href={item.url} target="_blank">
         <img
           src={item.screenshotUrl}
@@ -56,7 +57,7 @@ export const Carousel = forwardRef((props, ref) => {
         onSwiper={setThumbsSwiper}
         freeMode={true}
         watchSlidesProgress={true}
-        lazy={true}
+        // lazy={true}
         pagination={{
           clickable: true,
         }}
@@ -67,10 +68,10 @@ export const Carousel = forwardRef((props, ref) => {
         className="mySwiper"
       >{childrenThumbs}</Swiper>
       <Swiper
-        style={{
-          '--swiper-navigation-color': '#fff',
-          '--swiper-pagination-color': '#fff',
-        }}
+        // style={{
+        //   '--swiper-navigation-color': '#fff',
+        //   '--swiper-pagination-color': '#fff',
+        // }}
         effect={'coverflow'}
         parallax={true}
         freeMode={true}
@@ -85,7 +86,7 @@ export const Carousel = forwardRef((props, ref) => {
           modifier: 1,
           slideShadows: true,
         }}
-        lazy={true}
+        // lazy={true}
         pagination={{
           clickable: true,
         }}

@@ -56,8 +56,8 @@ const IndexPopup = () => {
       // setTimeout(async () => { await generateDocx() }, 0);
       setNewData(true)
       setDownloadHref("")
-      downloadRef.classList.remove('hidden')
-      shareRef.classList.remove('hidden')
+      if (downloadRef) downloadRef.classList.remove('hidden')
+      if (shareRef) shareRef.classList.remove('hidden')
     } catch (error) {
       setHaveErrors(true)
       const err = error instanceof Error ? error : JSON.parse(error)
@@ -70,17 +70,41 @@ const IndexPopup = () => {
   }
 
   const multiShotPage = async () => {
-    alert("Multishot not implemented...yet.")
+    const checkForPageElement = async (): Promise<string> => {
+      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
+      return await sendToContentScript({
+        name: "checkForPageElement",
+        tabId: tab.id,
+        body: { sel: nextSelector }
+      });
+    }
+    try {
+      await screenShotPage()
+      alert('fart')
+      const existsObjStr = await checkForPageElement()
+      const exists = JSON.parse(existsObjStr).exists
+      alert(exists)
+      if (exists) {
+
+      }
+    } catch (error) {
+      setHaveErrors(true)
+      const err = error instanceof Error ? error : JSON.parse(error)
+      const errorDiv = document.createElement('div')
+      errorDiv.innerText = err.stack
+      errorScroller.current.addNewTextBlob("Error", errorDiv.outerHTML);
+    }
+    alert('fit')
   }
 
   const share = async () => {
     alert("Share not implemented...yet.")
   }
 
-  const captureSelector = async (): Promise<any> => {
+  const captureSelector = async (name): Promise<any> => {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
-    return await sendToContentScript({
-      name: "selectPageElement",
+    return sendToContentScript({
+      name: name,
       tabId: tab.id,
     });
   }
@@ -88,10 +112,10 @@ const IndexPopup = () => {
   const getScreenShotSelector = async () => {
     try {
       showWaitCursor()
-      const str = await captureSelector()
+      const str = await captureSelector("selectPageElement")
       const o = JSON.parse(str)
-      console.log(o)
-      setSelScreenShot(o.selNext)
+      // console.log(o)
+      setSelScreenShot(o.selector)
     } catch (error) {
       setHaveErrors(true)
       const err = error instanceof Error ? error : JSON.parse(error)
@@ -106,10 +130,10 @@ const IndexPopup = () => {
   const getNextSelector = async () => {
     try {
       showWaitCursor()
-      const str = await captureSelector()
+      const str = await captureSelector("selectPageElement")
       const o = JSON.parse(str)
-      console.log(o)
-      setNextSelector(o.selNext)
+      // console.log(o)
+      setNextSelector(o.selector)
     } catch (error) {
       setHaveErrors(true)
       const err = error instanceof Error ? error : JSON.parse(error)
@@ -161,7 +185,12 @@ const IndexPopup = () => {
       </ExpanderButton>
 
       <RiCameraLine className="capture" onClick={screenShotPage} />
-      <RiCameraAiLine className="multiCapture" onClick={multiShotPage} />
+
+      { // Conditionally render based on nextSelector having a value
+        nextSelector &&
+        <RiCameraAiLine className="multiCapture" onClick={multiShotPage} />
+      }
+
 
       { // show when there is data
         downloadHref !== null &&

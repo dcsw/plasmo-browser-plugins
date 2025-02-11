@@ -5,7 +5,8 @@ import html2canvas from './html2canvas.min';
 export const config: PlasmoCSConfig = {
   matches: ["<all_urls>"],
   all_frames: true,
-  // world: "MAIN"
+  // world: "MAIN",
+  run_at: "document_idle"
 }
 
 const screenCapture = () => {
@@ -19,8 +20,9 @@ const screenCapture = () => {
       } catch (error) {
         res.send(JSON.stringify(error))
       }
+    } else {
+      // res.send(null)
     }
-    return true
   })
 }
 
