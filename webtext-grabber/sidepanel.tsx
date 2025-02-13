@@ -22,6 +22,7 @@ const hideWaitCursor = () => {
 const IndexPopup = () => {
   const [selScreenShot, setSelScreenShot] = useState("html")
   const [nextSelector, setNextSelector] = useState("")
+  const [maxCaptures, setMaxCaptures] = useState(5)
   const [welcomeUrl] = useState(`chrome-extension://${chrome.runtime.id}/tabs/welcome.html`)
   const carousel = useRef(null)
   const errorScroller = useRef(null)
@@ -176,6 +177,10 @@ const IndexPopup = () => {
           <ImNext className="getSelector" onClick={getNextSelector} />
           <input value={nextSelector} onChange={async (e) => setNextSelector(e.target.value)} />
           <TiDeleteOutline className="deleteIcon" onClick={() => setNextSelector("")} /> {/* Inside the flex container */}
+        </div>
+        <div className="inputContainer">
+          <label>Max Captures</label>
+          <input type="number" value={maxCaptures} onChange={async(e) => setMaxCaptures(e.target.ariaValueNow)}/>
         </div>
 
         <details open>
