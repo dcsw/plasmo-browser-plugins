@@ -74,19 +74,25 @@ const IndexPopup = () => {
     const checkForPageElement = async (): Promise<string> => {
       const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
       return await sendToContentScript({
-        name: "checkForPageElement",
+        name: "checkPageElement",
+        tabId: tab.id,
+        body: { sel: nextSelector }
+      });
+    }
+    const clickPageElement = async (): Promise<string> => {
+      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
+      return await sendToContentScript({
+        name: "clickPageElement",
         tabId: tab.id,
         body: { sel: nextSelector }
       });
     }
     try {
-      await screenShotPage()
-      alert('fart')
-      const existsObjStr = await checkForPageElement()
-      const exists = JSON.parse(existsObjStr).exists
-      alert(exists)
-      if (exists) {
-
+      for (let i: number = 0; i < maxCaptures; i++) {
+        await screenShotPage()
+        const existsObjStr = await checkForPageElement()
+        const exists = JSON.parse(existsObjStr).exists
+        if (exists) await clickPageElement()
       }
     } catch (error) {
       setHaveErrors(true)
@@ -95,7 +101,6 @@ const IndexPopup = () => {
       errorDiv.innerText = err.stack
       errorScroller.current.addNewTextBlob("Error", errorDiv.outerHTML);
     }
-    alert('fit')
   }
 
   const share = async () => {
@@ -180,7 +185,7 @@ const IndexPopup = () => {
         </div>
         <div className="inputContainer">
           <label>Max Captures</label>
-          <input type="number" value={maxCaptures} onChange={async(e) => setMaxCaptures(e.target.ariaValueNow)}/>
+          <input type="number" value={maxCaptures} onChange={async (e) => setMaxCaptures(e.target.value)} min={1} />
         </div>
 
         <details open>

@@ -1,7 +1,8 @@
 import type { PlasmoCSConfig } from "plasmo"
 import { useMessage } from "@plasmohq/messaging/hook"
 import { checkPageElement } from './checkPageElement'
-import { selectPageElement } from './selectPageElement'
+import { clickPageElement } from './clickPageElement'
+import { selectPageNode } from './selectPageElement'
 import { screenCapture } from './screenCapture-html2canvas'
 
 export const config: PlasmoCSConfig = {
@@ -16,8 +17,10 @@ const handleContentMessages = () => {
         switch (req.name) {
             case "checkPageElement":
                 await checkPageElement(req, res); break
+            case "clickPageElement":
+                await clickPageElement(req, res); break
             case "selectPageElement":
-                await selectPageElement(req, res); break
+                await selectPageNode(req, res); break
             case "screenCapture-html2canvas":
                 await screenCapture(req, res); break
             default:

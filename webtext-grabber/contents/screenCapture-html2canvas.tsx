@@ -11,8 +11,8 @@ const captureFullPage = async (selector: string) => {
       allowTaint: true,
       logging: true,
       useCORS: true,
-      // imageTimeout: 0,
-      foreignObjectRendering: false
+      imageTimeout: 30000,
+      foreignObjectRendering: true
     })
     // Now use canvas
     const imageURL = await canvas.toDataURL('image/png');

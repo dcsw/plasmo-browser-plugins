@@ -1,42 +1,50 @@
-let currentNode: HTMLElement | null = null; // stores the currently highlighted DOM element.
+let currentNode: Node | null = null; // stores the currently highlighted DOM node.
 let promiseResolve = null, promiseReject = null, myPromise = null
 
 const mouseOverHandler = (event) => {
-  let target = event.target as HTMLElement;
+  event.preventDefault();
+  event.stopPropagation();
+  let target = event.target as Node;
   if (currentNode && currentNode !== target) // remove previous highlight  
     outlineRemove();
   currentNode = target
-  if (target.matches('*')) highlightNodes(target); // Add a new purple bounding box around hovered elements dynamically   
-  currentNode.addEventListener('click', mouseClickHandler)
+  if (target.matches('*')) highlightNodes(target); // Add a new purple bounding box around hovered nodes dynamically   
+  currentNode.addEventListener('click', mouseClickHandler, { capture: true })
 }
 
-const mouseOutHandler = (event) => {   // remove previous highlights when mouse exits an element         
-  let target = event.relatedTarget as HTMLElement;
+const mouseOutHandler = (event) => {   // remove previous highlights when mouse exits an node
+  event.preventDefault();
+  event.stopPropagation();    
+  let target = event.relatedTarget as Node;
   if (currentNode && !target) {
     outlineRemove();
   }
 }
 
-const mouseClickHandler = (event) => {   // remove previous highlights when mouse exits an element    
+const mouseClickHandler = (event) => {   // remove previous highlights when mouse exits an node    
   try {
-    let clickedElement = event.target as HTMLElement;
-    if (currentNode && currentNode === clickedElement) {
+    event.preventDefault();
+    event.stopPropagation();
+    let clickedNode = event.target as Node;
+    if (currentNode && currentNode === clickedNode) {
       currentNode.removeEventListener("click", mouseClickHandler)
       outlineRemove();
       document.removeEventListener("mouseover", mouseOverHandler)
       document.removeEventListener("mouseout", mouseOutHandler)
 
-      const getFullSelector = (element) => {
-        let selector = "";
-        while (element.parentElement) {
-          const tag = element.tagName.toLowerCase();
-          const id = element.id ? `#${element.id}` : "";
-          const classes = element.className ? `.${element.className.split(/\s+/).join(".")}` : "";
-          const nthChild = `:nth-child(${Array.from(element.parentElement.children).indexOf(element) + 1})`;
-          selector = `${tag}${id}${classes}${nthChild} > ${selector}`;
-          element = element.parentElement;
+      const getFullSelector = (node) => {
+        if (node.id) { return '#' + node.id; }
+        if (node.className) { return '.' + node.className.baseVal.split(' ').join('.'); }
+        let selector = node.tagName.toLowerCase();
+        let parent = node.parentNode;
+        while (parent && parent !== document) {
+          const siblings = parent.children;
+          let index = Array.from(siblings).indexOf(node) + 1;
+          selector = `${parent.tagName.toLowerCase()} > ${selector}:nth-child(${index})`;
+          node = parent;
+          parent = parent.parentNode;
         }
-        return selector.slice(0, -3); // Remove the trailing " > "
+        return selector;
       }
 
       promiseResolve(getFullSelector(currentNode))
@@ -46,9 +54,9 @@ const mouseClickHandler = (event) => {   // remove previous highlights when mous
   }
 }
 
-// Function for adding a purple bounding box around elements 
+// Function for adding a purple bounding box around nodes 
 const highlightNodes = (node: Node | null = document.body) => {
-  if (node === null || !(node instanceof HTMLElement)) return;
+  if (node === null || !(node instanceof Node)) return;
   node.style.outline = "3px solid purple";
 }
 
@@ -57,10 +65,10 @@ const outlineRemove = () => {
   if (currentNode) currentNode.style.outline = "none";
 }
 
-export const selectPageElement = async (req, res) => {
+export const selectPageNode = async (req, res) => {
   try {
-    document.addEventListener('mouseover', mouseOverHandler)
-    document.addEventListener('mouseout', mouseOutHandler)
+    document.addEventListener('mouseover', mouseOverHandler, { capture: false })
+    document.addEventListener('mouseout', mouseOutHandler, { capture: false })
     myPromise = await new Promise((resolve, reject) => {
       promiseResolve = resolve;
       promiseReject = reject;
