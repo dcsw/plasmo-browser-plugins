@@ -9,10 +9,19 @@ const captureFullPage = async (selector: string) => {
       // windowHeight: window.outerHeight,
       // scale: 1,
       allowTaint: true,
-      logging: true,
+      logging: false,
       useCORS: true,
       imageTimeout: 30000,
-      foreignObjectRendering: true
+      foreignObjectRendering: true,
+      scale: 1,
+      onclone: (clonedDoc: any) => {
+        const svgElements = clonedDoc.querySelectorAll('svg');
+        svgElements.forEach((svg) => {
+          const bbox = svg.getBoundingClientRect();
+          svg.setAttribute('width', bbox.width);
+          svg.setAttribute('height', bbox.height);
+        });
+      }
     })
     // Now use canvas
     const imageURL = await canvas.toDataURL('image/png');

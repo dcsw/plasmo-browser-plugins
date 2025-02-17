@@ -10,6 +10,7 @@ import { Carousel } from 'components/carousel'
 import ExpanderButton from 'components/settings-expander'
 import { makeDoc } from './DocxGenerator'
 import 'assets/styles.css'
+import { table } from "console"
 
 const showWaitCursor = () => {
   document.documentElement.classList.add('wait-cursor');
@@ -70,29 +71,49 @@ const IndexPopup = () => {
     }
   }
 
+  // async function waitForTabUpdate(tabId: number): Promise<void> {
+  //   return new Promise((resolve) => {
+  //     const listener = (updatedTabId: number, changeInfo: chrome.tabs.TabChangeInfo) => {
+  //       if (updatedTabId === tabId && changeInfo.status === 'complete') {
+  //         chrome.tabs.onUpdated.removeListener(listener);
+  //         resolve();
+  //       }
+  //     };
+
+  //     chrome.tabs.onUpdated.addListener(listener);
+  //   });
+  // }
   const multiShotPage = async () => {
-    const checkForPageElement = async (): Promise<string> => {
-      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
+    const checkForPageElement = async (tab): Promise<string> => {
       return await sendToContentScript({
         name: "checkPageElement",
         tabId: tab.id,
         body: { sel: nextSelector }
       });
     }
-    const clickPageElement = async (): Promise<string> => {
-      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
+    const clickPageElement = async (tab): Promise<string> => {
       return await sendToContentScript({
         name: "clickPageElement",
         tabId: tab.id,
         body: { sel: nextSelector }
-      });
+      })
+    }
+    const waitForDOMUpdate = async (tab): Promise<string> => {
+      return await sendToContentScript({
+        name: "waitForDOMUpdate",
+        tabId: tab.id
+      })
     }
     try {
       for (let i: number = 0; i < maxCaptures; i++) {
+        const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
         await screenShotPage()
-        const existsObjStr = await checkForPageElement()
+        const existsObjStr = await checkForPageElement(tab)
         const exists = JSON.parse(existsObjStr).exists
-        if (exists) await clickPageElement()
+        if (exists) {
+          await clickPageElement(tab)
+          await waitForDOMUpdate(tab)
+        }
       }
     } catch (error) {
       setHaveErrors(true)

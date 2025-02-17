@@ -32,20 +32,43 @@ const mouseClickHandler = (event) => {   // remove previous highlights when mous
       document.removeEventListener("mouseover", mouseOverHandler)
       document.removeEventListener("mouseout", mouseOutHandler)
 
-      const getFullSelector = (node) => {
-        if (node.id) { return '#' + node.id; }
-        if (node.className) { return '.' + node.className.baseVal.split(' ').join('.'); }
-        let selector = node.tagName.toLowerCase();
-        let parent = node.parentNode;
-        while (parent && parent !== document) {
-          const siblings = parent.children;
-          let index = Array.from(siblings).indexOf(node) + 1;
-          selector = `${parent.tagName.toLowerCase()} > ${selector}:nth-child(${index})`;
-          node = parent;
-          parent = parent.parentNode;
+      const getFullSelector = (node: Node): string => {
+        if (!(node instanceof Element)) {
+          return '';
         }
-        return selector;
+      
+        const path: string[] = [];
+        let element = node as Element;
+      
+        while (element && element.nodeType === Node.ELEMENT_NODE) {
+          let selector = element.nodeName.toLowerCase();
+          
+          if (element.id) {
+            selector = `#${element.id}`;
+            path.unshift(selector);
+            break;
+          } else {
+            let sib = element;
+            let nth = 1;
+            while (sib.previousSibling) {
+              sib = sib.previousSibling as Element;
+              if (sib.nodeType === Node.ELEMENT_NODE && sib.nodeName.toLowerCase() === selector) {
+                nth++;
+              }
+            }
+            
+            if (nth > 1) {
+              selector += `:nth-of-type(${nth})`;
+            }
+          }
+      
+          path.unshift(selector);
+          element = element.parentNode as Element;
+        }
+      
+        return path.join(' > ');
       }
+        
 
       promiseResolve(getFullSelector(currentNode))
     }
