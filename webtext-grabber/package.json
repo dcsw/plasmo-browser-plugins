@@ -45,7 +45,8 @@
     "permissions": [
       "activeTab",
       "tabs",
-      "sidePanel"
+      "sidePanel",
+      "scripting"
     ],
     "host_permissions": [
       "https://*/*",
@@ -55,6 +56,13 @@
     "content_security_policy": {
       "extension_pages": "script-src 'self'; object-src 'self'; style-src 'self'; img-src 'self' data:"
     },
+    "content_scripts": [
+      {
+        "matches": ["<all_urls>"],
+        "js": ["static/contents/eventsTracker.tsx", "static/contents/clickPageElement.tsx"],
+        "run_at": "document_start"
+      }
+    ],
     "action": {
       "default_title": "Open Side Panel"
     }

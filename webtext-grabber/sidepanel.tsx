@@ -71,18 +71,6 @@ const IndexPopup = () => {
     }
   }
 
-  // async function waitForTabUpdate(tabId: number): Promise<void> {
-  //   return new Promise((resolve) => {
-  //     const listener = (updatedTabId: number, changeInfo: chrome.tabs.TabChangeInfo) => {
-  //       if (updatedTabId === tabId && changeInfo.status === 'complete') {
-  //         chrome.tabs.onUpdated.removeListener(listener);
-  //         resolve();
-  //       }
-  //     };
-
-  //     chrome.tabs.onUpdated.addListener(listener);
-  //   });
-  // }
   const multiShotPage = async () => {
     const checkForPageElement = async (tab): Promise<string> => {
       return await sendToContentScript({

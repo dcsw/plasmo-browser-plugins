@@ -9,7 +9,7 @@
     "window.d.ts",
     "./**/*.ts",
     "./**/*.tsx"
-  ],
+, "contents/eventsTracker.tsx"  ],
   "compilerOptions": {
     "jsx": "preserve",
     "paths": {
