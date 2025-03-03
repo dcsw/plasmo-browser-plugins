@@ -178,9 +178,7 @@ const IndexPopup = () => {
   return (
     <div className="bg-image">
       <a className="welcome" href={welcomeUrl} target="_blank">Welcome!</a>
-      <ExpanderButton className="settings" summary={""}>
-        <div>Settings</div>
-        <br />
+      <ExpanderButton className="settings" heading="" hover="Click for Settings">
         <div className="inputContainer"> {/* New container for input and delete icon */}
           <ImNext className="getSelector" onClick={getScreenShotSelector} />
           <input value={selScreenShot} onChange={async (e) => setSelScreenShot(e.target.value)}></input>

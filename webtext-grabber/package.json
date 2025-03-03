@@ -5,12 +5,13 @@
   "description": "A simple screen shotter browser plugin.",
   "author": "dcsw",
   "scripts": {
+    "clean": "rm -rf node_modules ../.pnpm-store build .plasmo .next",
     "start": "next start",
     "dev": "run-p dev:*",
     "dev:plasmo": "plasmo dev",
     "dev:next": "next dev --port 1947",
     "build": "run-s build:*",
-    "build:plasmo": "plasmo build",
+    "build:plasmo": "plasmo build --zip",
     "build:next": "next build",
     "package": "plasmo package",
     "disable-telemetry": "pnpm exec next telemetry disable"
@@ -24,7 +25,7 @@
     "html2canvas": "^1.4.1",
     "jimp": "^1.6.0",
     "next": "14.1.0",
-    "plasmo": "0.89.1",
+    "plasmo": "0.90.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^5.4.0",
@@ -58,8 +59,13 @@
     },
     "content_scripts-nope-not-needed": [
       {
-        "matches": ["<all_urls>"],
-        "js": ["static/contents/eventsTracker.tsx", "static/contents/clickPageElement.tsx"],
+        "matches": [
+          "<all_urls>"
+        ],
+        "js": [
+          "static/contents/eventsTracker.tsx",
+          "static/contents/clickPageElement.tsx"
+        ],
         "run_at": "document_start"
       }
     ],
