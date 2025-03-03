@@ -1,28 +1,5 @@
 import type { PlasmoCSConfig } from "plasmo"
-import { useMessage } from "@plasmohq/messaging/hook"
 import html2canvas from './html2canvas.min';
-
-export const config: PlasmoCSConfig = {
-  matches: ["<all_urls>"],
-  all_frames: true,
-  // world: "MAIN"
-}
-
-const screenCapture = () => {
-  const { data } = useMessage<string, string>(async (req, res) => {
-    if (req.name === "screenCapture-html2canvas") {
-      try {
-        const dataUrl = await captureFullPage(req.body.selector)
-        // const dataUrl = await chrome.tabCapture()
-        if (!dataUrl.match(/^data\:/)) throw new Error("Error: ", dataUrl);
-        res.send(JSON.stringify({ url: document.location.href, title: document.title, screenshotUrl: dataUrl }))
-      } catch (error) {
-        res.send(JSON.stringify(error))
-      }
-    }
-    return true
-  })
-}
 
 const captureFullPage = async (selector: string) => {
   const element: HTMLElement = document.querySelector(selector);
@@ -32,10 +9,19 @@ const captureFullPage = async (selector: string) => {
       // windowHeight: window.outerHeight,
       // scale: 1,
       allowTaint: true,
-      logging: true,
+      logging: false,
       useCORS: true,
-      // imageTimeout: 0,
-      foreignObjectRendering: false
+      imageTimeout: 30000,
+      foreignObjectRendering: true,
+      scale: 1,
+      onclone: (clonedDoc: any) => {
+        const svgElements = clonedDoc.querySelectorAll('svg');
+        svgElements.forEach((svg) => {
+          const bbox = svg.getBoundingClientRect();
+          svg.setAttribute('width', bbox.width);
+          svg.setAttribute('height', bbox.height);
+        });
+      }
     })
     // Now use canvas
     const imageURL = await canvas.toDataURL('image/png');
@@ -44,4 +30,13 @@ const captureFullPage = async (selector: string) => {
   return null;
 }
 
-export default screenCapture
+export const screenCapture = async (req, res) => {
+  try {
+    const dataUrl = await captureFullPage(req.body.selector)
+    // const dataUrl = await chrome.tabCapture()
+    if (!dataUrl.match(/^data\:/)) throw new Error("Error: " + dataUrl);
+    res.send(JSON.stringify({ url: document.location.href, title: document.title, screenshotUrl: dataUrl }))
+  } catch (error) {
+    res.send(JSON.stringify(error))
+  }
+}

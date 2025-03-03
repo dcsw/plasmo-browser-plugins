@@ -1,26 +1,29 @@
 import React, { useState, useRef } from "react"
 import { type PlasmoMessaging, sendToContentScript, sendToBackground } from "@plasmohq/messaging"
-import { CiSettings } from "react-icons/ci"
-import { RiCameraLine } from "react-icons/ri"
-import { RiCameraAiLine } from "react-icons/ri"
+import { RiCameraLine, RiCameraAiLine } from "react-icons/ri"
 import { HiOutlineDocumentDownload } from "react-icons/hi"
 import { GoShare } from "react-icons/go"
+import { ImNext } from "react-icons/im"
+import { TiDeleteOutline } from 'react-icons/ti'
 import { InfiniteScroller } from "components/infinite-scroller"
 import { Carousel } from 'components/carousel'
 import ExpanderButton from 'components/settings-expander'
-import { makeDoc } from './DocxGenerator';
+import { makeDoc } from './DocxGenerator'
 import 'assets/styles.css'
+import { table } from "console"
 
-function showWaitCursor() {
+const showWaitCursor = () => {
   document.documentElement.classList.add('wait-cursor');
 }
 
-function hideWaitCursor() {
+const hideWaitCursor = () => {
   document.documentElement.classList.remove('wait-cursor');
 }
 
 const IndexPopup = () => {
-  const [selector, setSelector] = useState("html")
+  const [selScreenShot, setSelScreenShot] = useState("html")
+  const [nextSelector, setNextSelector] = useState("")
+  const [maxCaptures, setMaxCaptures] = useState(5)
   const [welcomeUrl] = useState(`chrome-extension://${chrome.runtime.id}/tabs/welcome.html`)
   const carousel = useRef(null)
   const errorScroller = useRef(null)
@@ -38,7 +41,7 @@ const IndexPopup = () => {
         name: "screenCapture-html2canvas",
         tabId: tab.id,
         body: {
-          selector: selector
+          selector: selScreenShot
         }
       });
     }
@@ -55,8 +58,8 @@ const IndexPopup = () => {
       // setTimeout(async () => { await generateDocx() }, 0);
       setNewData(true)
       setDownloadHref("")
-      downloadRef.classList.remove('hidden')
-      shareRef.classList.remove('hidden')
+      if (downloadRef) downloadRef.classList.remove('hidden')
+      if (shareRef) shareRef.classList.remove('hidden')
     } catch (error) {
       setHaveErrors(true)
       const err = error instanceof Error ? error : JSON.parse(error)
@@ -69,11 +72,92 @@ const IndexPopup = () => {
   }
 
   const multiShotPage = async () => {
-    alert("Multishot not implemented...yet.")
+    const checkForPageElement = async (tab): Promise<string> => {
+      return await sendToContentScript({
+        name: "checkPageElement",
+        tabId: tab.id,
+        body: { sel: nextSelector }
+      });
+    }
+    const clickPageElement = async (tab): Promise<string> => {
+      return await sendToContentScript({
+        name: "clickPageElement",
+        tabId: tab.id,
+        body: { sel: nextSelector }
+      })
+    }
+    const waitForDOMUpdate = async (tab): Promise<string> => {
+      return await sendToContentScript({
+        name: "waitForDOMUpdate",
+        tabId: tab.id
+      })
+    }
+    try {
+      for (let i: number = 0; i < maxCaptures; i++) {
+        const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
+        await screenShotPage()
+        const existsObjStr = await checkForPageElement(tab)
+        const exists = JSON.parse(existsObjStr).exists
+        if (exists) {
+          await clickPageElement(tab)
+          await waitForDOMUpdate(tab)
+        }
+      }
+    } catch (error) {
+      setHaveErrors(true)
+      const err = error instanceof Error ? error : JSON.parse(error)
+      const errorDiv = document.createElement('div')
+      errorDiv.innerText = err.stack
+      errorScroller.current.addNewTextBlob("Error", errorDiv.outerHTML);
+    }
   }
 
   const share = async () => {
     alert("Share not implemented...yet.")
+  }
+
+  const captureSelector = async (name): Promise<any> => {
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
+    return sendToContentScript({
+      name: name,
+      tabId: tab.id,
+    });
+  }
+
+  const getScreenShotSelector = async () => {
+    try {
+      showWaitCursor()
+      const str = await captureSelector("selectPageElement")
+      const o = JSON.parse(str)
+      // console.log(o)
+      setSelScreenShot(o.selector)
+    } catch (error) {
+      setHaveErrors(true)
+      const err = error instanceof Error ? error : JSON.parse(error)
+      const errorDiv = document.createElement('div')
+      errorDiv.innerText = err.stack
+      errorScroller.current.addNewTextBlob("Error", errorDiv.outerHTML);
+    } finally {
+      hideWaitCursor()
+    }
+  }
+
+  const getNextSelector = async () => {
+    try {
+      showWaitCursor()
+      const str = await captureSelector("selectPageElement")
+      const o = JSON.parse(str)
+      // console.log(o)
+      setNextSelector(o.selector)
+    } catch (error) {
+      setHaveErrors(true)
+      const err = error instanceof Error ? error : JSON.parse(error)
+      const errorDiv = document.createElement('div')
+      errorDiv.innerText = err.stack
+      errorScroller.current.addNewTextBlob("Error", errorDiv.outerHTML);
+    } finally {
+      hideWaitCursor()
+    }
   }
 
   const generateDocx = async (e) => {
@@ -96,7 +180,23 @@ const IndexPopup = () => {
       <a className="welcome" href={welcomeUrl} target="_blank">Welcome!</a>
       <ExpanderButton className="settings" summary={""}>
         <div>Settings</div>
-        <input value={selector} onChange={async (e) => setSelector(e.target.value)} />
+        <br />
+        <div className="inputContainer"> {/* New container for input and delete icon */}
+          <ImNext className="getSelector" onClick={getScreenShotSelector} />
+          <input value={selScreenShot} onChange={async (e) => setSelScreenShot(e.target.value)}></input>
+          <TiDeleteOutline className="deleteIcon" onClick={() => setSelScreenShot("")} /> {/* Inside the flex container */}
+        </div>
+        <br />
+        <div className="inputContainer"> {/* New container for input and delete icon */}
+          <ImNext className="getSelector" onClick={getNextSelector} />
+          <input value={nextSelector} onChange={async (e) => setNextSelector(e.target.value)} />
+          <TiDeleteOutline className="deleteIcon" onClick={() => setNextSelector("")} /> {/* Inside the flex container */}
+        </div>
+        <div className="inputContainer">
+          <label>Max Captures</label>
+          <input type="number" value={maxCaptures} onChange={async (e) => setMaxCaptures(e.target.value)} min={1} />
+        </div>
+
         <details open>
           <summary className={`${'errors' + (haveErrors ? ' some' : ' none')}`}>Errors</summary>
           <InfiniteScroller ref={errorScroller}></InfiniteScroller>
@@ -104,7 +204,12 @@ const IndexPopup = () => {
       </ExpanderButton>
 
       <RiCameraLine className="capture" onClick={screenShotPage} />
-      <RiCameraAiLine className="multiCapture" onClick={multiShotPage} />
+
+      { // Conditionally render based on nextSelector having a value
+        nextSelector &&
+        <RiCameraAiLine className="multiCapture" onClick={multiShotPage} />
+      }
+
 
       { // show when there is data
         downloadHref !== null &&

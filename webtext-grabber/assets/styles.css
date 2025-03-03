@@ -9,9 +9,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  /* width: 100%; */
   padding: 8px 16px;
-  /* background-color: #f0f0f0; */
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -26,7 +24,6 @@
   width: 16px;
   height: 16px;
   transition: transform 0.3s ease;
-  /* margin-right: 8%; */
 }
 
 details[open] .icon {
@@ -34,7 +31,6 @@ details[open] .icon {
 }
 
 .expanded-content {
-  /* margin-top: 16px; */
   padding: 16px;
   background-color: #f9f9f9;
   border-radius: 4px;
@@ -83,4 +79,27 @@ details[open] .icon {
   background-repeat: no-repeat;
   height: 600px;
   width: 100%;
+}
+
+.deleteIcon:hover {
+  color: red; /* You can customize this as needed */
+}
+
+.getSelector, .deleteIcon {
+  height: 1.5em;
+  width: 1.5em;
+  margin-right: 0.5em;
+}
+
+.deleteIcon {
+  display: flex; /* Use Flexbox */
+  align-items: center; /* Align vertically */
+  justify-content: center; /* Center horizontally */
+  margin-left: -1.2em; /* Adjust as needed for spacing */
+  background: white;
+}
+
+.inputContainer {
+  display: flex; /* Using a containing div for Flexbox layout */
+  align-items: anchor-center;
 }
