@@ -88,18 +88,37 @@ details[open] .icon {
 .getSelector, .deleteIcon {
   height: 1.5em;
   width: 1.5em;
-  margin-right: 0.5em;
+  margin-left: 0.5em;
 }
 
 .deleteIcon {
   display: flex; /* Use Flexbox */
   align-items: center; /* Align vertically */
   justify-content: center; /* Center horizontally */
-  margin-left: -1.2em; /* Adjust as needed for spacing */
+  margin-left: -1.65em; /* Adjust as needed for spacing */
   background: white;
 }
 
 .inputContainer {
   display: flex; /* Using a containing div for Flexbox layout */
   align-items: anchor-center;
+  margin-bottom: 0.5em;
+}
+
+.settingNameSection {
+  width: 8em;
+  text-align: right;
+}
+
+label {
+  text-align: right;
+}
+
+.settingInput {
+  margin-left: 0.5em;
+}
+
+.settingNumeric {
+  max-width: 4em;
+  text-align: right;
 }

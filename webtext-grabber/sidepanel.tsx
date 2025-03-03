@@ -180,22 +180,27 @@ const IndexPopup = () => {
       <a className="welcome" href={welcomeUrl} target="_blank">Welcome!</a>
       <ExpanderButton className="settings" heading="" hover="Click for Settings">
         <div className="inputContainer"> {/* New container for input and delete icon */}
-          <ImNext className="getSelector" onClick={getScreenShotSelector} />
-          <input value={selScreenShot} onChange={async (e) => setSelScreenShot(e.target.value)}></input>
+          <span className="settingNameSection">
+            <label title="Choose area to screenshot.">Screenshot</label>
+            <ImNext className="getSelector" onClick={getScreenShotSelector} />
+          </span>
+          <input className="settingInput" value={selScreenShot} onChange={async (e) => setSelScreenShot(e.target.value)}></input>
           <TiDeleteOutline className="deleteIcon" onClick={() => setSelScreenShot("")} /> {/* Inside the flex container */}
         </div>
-        <br />
         <div className="inputContainer"> {/* New container for input and delete icon */}
-          <ImNext className="getSelector" onClick={getNextSelector} />
-          <input value={nextSelector} onChange={async (e) => setNextSelector(e.target.value)} />
+          <span className="settingNameSection">
+            <label title="Select button or area to click on to go to the next page or content view.">Next</label>
+            <ImNext className="getSelector" onClick={getNextSelector} />
+          </span>
+          <input className="settingInput" value={nextSelector} onChange={async (e) => setNextSelector(e.target.value)} />
           <TiDeleteOutline className="deleteIcon" onClick={() => setNextSelector("")} /> {/* Inside the flex container */}
         </div>
         <div className="inputContainer">
-          <label>Max Captures</label>
-          <input type="number" value={maxCaptures} onChange={async (e) => setMaxCaptures(e.target.value)} min={1} />
+          <label className="settingNameSection">Max Captures</label>
+          <input className="settingInput settingNumeric" type="number" value={maxCaptures} onChange={async (e) => setMaxCaptures(e.target.value)} min={1} />
         </div>
 
-        <details open>
+        <details className="inputContainer" open>
           <summary className={`${'errors' + (haveErrors ? ' some' : ' none')}`}>Errors</summary>
           <InfiniteScroller ref={errorScroller}></InfiniteScroller>
         </details>

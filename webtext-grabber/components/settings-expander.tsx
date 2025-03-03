@@ -21,7 +21,7 @@ const ExpanderButton = ({ children, className, hover="Expand", heading="Heading"
         <CiSettings className={`icon ${isExpanded ? 'expanded' : ''}`} />
       </summary>
       <div className="expanded-content">
-        <span>{title}</span>
+        <span><h2>{title}</h2></span>
         {children}
       </div>
     </details>
