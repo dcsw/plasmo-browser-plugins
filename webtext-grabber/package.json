@@ -5,7 +5,7 @@
   "description": "A simple screen shotter browser plugin.",
   "author": "dcsw",
   "scripts": {
-    "clean": "rm -rf node_modules ../.pnpm-store build .plasmo .next",
+    "clean": "rm -rf node_modules ../.pnpm-store build .plasmo .next pnpm-lock.yaml",
     "start": "next start",
     "dev": "run-p dev:*",
     "dev:plasmo": "plasmo dev",
@@ -22,6 +22,7 @@
     "@viselect/vanilla": "^3.9.0",
     "buffer": "^6.0.3",
     "docx": "^9.1.1",
+    "dom-to-image-more": "^3.5.0",
     "html2canvas": "^1.4.1",
     "jimp": "^1.6.0",
     "next": "14.1.0",
@@ -47,7 +48,8 @@
       "activeTab",
       "tabs",
       "sidePanel",
-      "scripting"
+      "scripting",
+      "storage"
     ],
     "host_permissions": [
       "https://*/*",
