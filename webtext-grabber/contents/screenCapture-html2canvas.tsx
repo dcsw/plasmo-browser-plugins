@@ -31,7 +31,12 @@ const captureFullPage = async (selector: string) => {
 
     let myPromise = await new Promise((resolve, reject) => {
       domtoimage
-        .toJpeg(element, { quality: 0.95 })
+        .toJpeg(element, {
+          quality: 0.95,
+          bgcolor: '#ffffff', // Explicit background color
+          height: document.documentElement.scrollHeight, // Full page height
+          width: document.documentElement.scrollWidth // Full page width
+        })
         .then(function (imgURL) { resolve(imgURL) })
         .catch(function (error) { reject(error) });
     });
