@@ -1,31 +1,52 @@
 import type { PlasmoCSConfig } from "plasmo"
 import html2canvas from './html2canvas.min';
+import * as htmlToImage from 'html-to-image';
+import { toPng, toJpeg, toBlob, toPixelData, toSvg } from 'html-to-image';
 
 const captureFullPage = async (selector: string) => {
-  const element: HTMLElement = document.querySelector(selector);
+  const element: HTMLNode = document.querySelector(selector);
   if (element) {
-    const canvas = await html2canvas(element, {
-      // windowWidth: window.outerWidth,
-      // windowHeight: window.outerHeight,
-      // scale: 1,
-      allowTaint: true,
-      logging: false,
-      useCORS: true,
-      imageTimeout: 30000,
-      foreignObjectRendering: true,
-      scale: 1,
-      onclone: (clonedDoc: any) => {
-        const svgElements = clonedDoc.querySelectorAll('svg');
-        svgElements.forEach((svg) => {
-          const bbox = svg.getBoundingClientRect();
-          svg.setAttribute('width', bbox.width);
-          svg.setAttribute('height', bbox.height);
-        });
+    try {
+      const fontEmbedCSS = await htmlToImage.getFontEmbedCSS(element);
+      const imageURL = await htmlToImage.toPng(element, {
+        // useCORS: true,
+        backgroundColor: "#FFFFFF", // Prevents transparent background
+        height: element.scrollHeight,
+        cacheBust: true,
+        includeQueryParams: true,
+        fontEmbedCSS,
+        skipAutoScale: true
+      })
+      return imageURL
+    } catch (err) {
+      try {
+        const canvas = await html2canvas(element, {
+          // windowWidth: window.outerWidth,
+          // windowHeight: window.outerHeight,
+          // scale: 1,
+          allowTaint: true,
+          logging: false,
+          useCORS: true,
+          imageTimeout: 30000,
+          foreignObjectRendering: true,
+          scale: 1,
+          onclone: (clonedDoc: any) => {
+            const svgElements = clonedDoc.querySelectorAll('svg');
+            svgElements.forEach((svg) => {
+              const bbox = svg.getBoundingClientRect();
+              svg.setAttribute('width', bbox.width);
+              svg.setAttribute('height', bbox.height);
+            });
+          }
+        })
+        // Now use canvas
+        const imageURL = await canvas.toDataURL('image/png');
+        return imageURL;
+      } catch (err) {
+        alert('oops, something went wrong!' + err.message);
+        throw err
       }
-    })
-    // Now use canvas
-    const imageURL = await canvas.toDataURL('image/png');
-    return imageURL;
+    }
   }
   return null;
 }
