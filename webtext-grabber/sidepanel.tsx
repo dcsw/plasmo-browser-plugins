@@ -89,7 +89,8 @@ const IndexPopup = () => {
     const waitForDOMUpdate = async (tab): Promise<string> => {
       return await sendToContentScript({
         name: "waitForDOMUpdate",
-        tabId: tab.id
+        tabId: tab.id,
+        body: { sel: nextSelector }
       })
     }
     try {
