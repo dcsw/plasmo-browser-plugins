@@ -1,36 +1,53 @@
+// Improve css selection inspired by https://www.perplexity.ai/search/what-s-the-best-typescript-or-u0dTbpZfSVmEfJGrLWKaxQ
 export const getCssSelector = (node: Node): string => {
-  if (!(node instanceof Element)) {
-    return '';
+  if (!node || !node.parentNode) {
+      return ''; // Invalid node
   }
 
-  const path: string[] = [];
-  let element = node as Element;
+  const getNodeIndex = (node: Node): number => {
+      let index = 0;
+      let sibling = node.previousSibling;
+      while (sibling) {
+          index++;
+          sibling = sibling.previousSibling;
+      }
+      return index;
+  };
 
-  while (element && element.nodeType === Node.ELEMENT_NODE) {
-    let selector = element.nodeName.toLowerCase();
+  const buildElementPath = (element: Element): string => {
+      let path = '';
+      let current: Element | null = element;
 
-    if (element.id) {
-      selector = `#${element.id}`;
-      path.unshift(selector);
-      break;
-    } else {
-      let sib = element;
-      let nth = 1;
-      while (sib.previousSibling) {
-        sib = sib.previousSibling as Element;
-        if (sib.nodeType === Node.ELEMENT_NODE && sib.nodeName.toLowerCase() === selector) {
-          nth++;
-        }
+      while (current && current.nodeType === Node.ELEMENT_NODE) {
+          const tagName = current.tagName.toLowerCase();
+          const siblings = Array.from(current.parentNode?.children || []);
+          const sameTagSiblings = siblings.filter((el) => el.tagName === current.tagName);
+          const index = sameTagSiblings.indexOf(current as HTMLElement);
+
+          path = `${tagName}${sameTagSiblings.length > 1 ? `:nth-of-type(${index + 1})` : ''}` + 
+                 (path ? ' > ' + path : '');
+          current = current.parentElement;
       }
 
-      if (nth > 1) {
-        selector += `:nth-of-type(${nth})`;
-      }
-    }
+      return path;
+  };
 
-    path.unshift(selector);
-    element = element.parentNode as Element;
+  // Find the nearest parent element
+  const parentElement = node.parentElement;
+  if (!parentElement) {
+      return ''; // No valid parent element
   }
 
-  return path.join(' > ');
+  // Build the CSS selector for the parent element
+  const parentSelector = buildElementPath(parentElement);
+
+  // Add positional information for the node within its parent's childNodes
+  const nodeIndex = getNodeIndex(node);
+  return `${parentSelector} > :nth-child(${nodeIndex + 1})`;
+}
+
+// Example usage:
+const targetNode = document.querySelector('your-selector')?.childNodes[0]; // Replace with your target node
+if (targetNode) {
+  console.log(getCssSelectorForNode(targetNode));
 }
