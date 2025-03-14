@@ -1,7 +1,5 @@
-import type { PlasmoCSConfig } from "plasmo"
 import html2canvas from './html2canvas.min';
 import * as htmlToImage from 'html-to-image';
-import { toPng, toJpeg, toBlob, toPixelData, toSvg } from 'html-to-image';
 
 const captureFullPage = async (selector: string) => {
   const element: HTMLNode = document.querySelector(selector);
@@ -54,7 +52,6 @@ const captureFullPage = async (selector: string) => {
 export const screenCapture = async (req, res) => {
   try {
     const dataUrl = await captureFullPage(req.body.selector)
-    // const dataUrl = await chrome.tabCapture()
     if (!dataUrl.match(/^data\:/)) throw new Error("Error: " + dataUrl);
     res.send(JSON.stringify({ url: document.location.href, title: document.title, screenshotUrl: dataUrl }))
   } catch (error) {
