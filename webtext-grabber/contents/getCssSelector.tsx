@@ -40,15 +40,5 @@ export const getCssSelector = (node: Node): string => {
 
     // Build the CSS selector for the parent element
     const parentSelector = buildElementPath(parentElement);
-
-    // Add positional information for the node within its parent's childNodes
-    //   const nodeIndex = getNodeIndex(node);
-    //   return `${parentSelector} > :nth-child(${nodeIndex + 1})`;
     return parentSelector
 }
-
-// Example usage:
-// const targetNode = document.querySelector('your-selector')?.childNodes[0]; // Replace with your target node
-// if (targetNode) {
-//   console.log(getCssSelectorForNode(targetNode));
-// }
