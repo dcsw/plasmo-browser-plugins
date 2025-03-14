@@ -5,9 +5,10 @@
   "description": "A simple screen shotter browser plugin.",
   "author": "dcsw",
   "scripts": {
-    "clean": "rm -rf node_modules ../.pnpm-store build .plasmo .next",
+    "clean": "rm -rf build .plasmo .next",
+    "reset": "rm -rf node_modules ../.pnpm-store build .plasmo .next",
     "start": "next start",
-    "dev": "run-p dev:*",
+    "dev": "FAST_REFRESH=false run-p dev:*",
     "dev:plasmo": "plasmo dev",
     "dev:next": "next dev --port 1947",
     "build": "run-s build:*",
