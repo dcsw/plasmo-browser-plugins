@@ -2,7 +2,7 @@ import html2canvas from './html2canvas.min';
 import * as htmlToImage from 'html-to-image';
 
 const captureFullPage = async (selector: string) => {
-  const element: HTMLNode = document.querySelector(selector);
+  const element: HTMLElement = document.querySelector(selector);
   if (element) {
     try {
       const fontEmbedCSS = await htmlToImage.getFontEmbedCSS(element);

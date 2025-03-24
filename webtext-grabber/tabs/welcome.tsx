@@ -29,7 +29,7 @@ function WelcomeTab() {
       <div>This is {name} version {version} {description[0].toLowerCase()}{description.match(/.(.*)\.?$/)[1]} written by {author}.</div>
       <details>
         <summary>Dependencies</summary>
-        {Object.entries(dependencies).map(([n, v], _i) => { return (<div key={n}>{n}@{v}</div>); })}
+        {Object.entries(dependencies as { [key: string]: string }).map(([n, v], _i) => { return (<div key={n}>{n}@{v}</div>); })}
       </details>
     </div>
   )
