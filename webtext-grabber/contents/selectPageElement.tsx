@@ -6,11 +6,11 @@ let promiseResolve = null, promiseReject = null, myPromise = null
 const mouseOverHandler = (event) => {
   // event.preventDefault();
   // event.stopPropagation();
-  let target: Node = event.target as HTMLElement;
+  let target: Node = event.target as Node;
   if (currentNode && currentNode !== target) // remove previous highlight  
     outlineRemove();
   currentNode = target
-  if ((target as Element)?.tagName.match('*')) highlightNodes(target); // Add a new purple bounding box around hovered nodes dynamically   
+  if (target.matches('*')) highlightNodes(target); // Add a new purple bounding box around hovered nodes dynamically   
   currentNode.addEventListener('click', mouseClickHandler, { capture: false })
 }
 
@@ -44,12 +44,12 @@ const mouseClickHandler = (event) => {   // remove previous highlights when mous
 // Function for adding a purple bounding box around nodes 
 const highlightNodes = (node: Node | null = document.body) => {
   if (node === null || !(node instanceof Node)) return;
-  (node as HTMLElement).style.outline = "4px solid purple";
+  node.style.outline = "4px solid purple";
 }
 
 // Function to remove the existing bounding box  
 const outlineRemove = () => {
-  if (currentNode) (currentNode as HTMLElement).style.outline = "none";
+  if (currentNode) currentNode.style.outline = "none";
 }
 
 export const selectPageNode = async (req, res) => {

@@ -1,18 +1,17 @@
-import { Jimp, JimpMime, type ScaleToFitOptions } from 'jimp/dist/browser';
-import { Paragraph, ImageRun, AlignmentType, type ParagraphChild } from 'docx';
-import { stringify } from 'querystring';
+import { Jimp, JimpMime, ScaleToFitOptions } from 'jimp/dist/browser';
+import { Paragraph, ImageRun, AlignmentType } from 'docx';
 
 export async function createImageChunks(
     imageBuffer: Buffer,
     pageWidth: number,
     pageHeight: number,
     initialPageHeight: number,
-    alignment = AlignmentType.LEFT
-): Promise<Paragraph[]> {
+    alignment : AlignmentType = AlignmentType.LEFT
+): Promise<ImageRun[]> {
     const rawImage = await Jimp.read(imageBuffer);
     const targetImageWidth = Math.min(rawImage.bitmap.width, pageWidth)
     const image = await rawImage.scaleToFit({ w: ~~targetImageWidth, h: ~~(rawImage.bitmap.height * pageWidth/rawImage.bitmap.width) })
-    const chunks: Paragraph[] = [];
+    const chunks: ImageRun[] = [];
 
     const chunkHeight = Math.min(pageHeight, image.bitmap.height);
 
@@ -33,8 +32,7 @@ export async function createImageChunks(
                     alignment: alignment,
                     children: [
                         new ImageRun({
-                            type: "jpg", // Specify the type explicitly
-                            data: buffer, // Your JPEG image buffer
+                            data: buffer,
                             transformation: {
                                 width: widthToCrop,
                                 height: heightToCrop,

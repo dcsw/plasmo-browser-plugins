@@ -198,7 +198,7 @@ const IndexPopup = () => {
         </div>
         <div className="inputContainer">
           <label className="settingNameSection">Max Captures</label>
-          <input className="settingInput settingNumeric" type="number" value={maxCaptures} onChange={async (e) => setMaxCaptures(parseInt(e.target.value))} min={1} />
+          <input className="settingInput settingNumeric" type="number" value={maxCaptures} onChange={async (e) => setMaxCaptures(e.target.value)} min={1} />
         </div>
 
         <details className="inputContainer" open>
