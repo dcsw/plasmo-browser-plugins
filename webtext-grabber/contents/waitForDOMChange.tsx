@@ -23,3 +23,4 @@ async function waitForDOMUpdateX(targetNode = document.documentElement, config =
         }, 5000);
     });
 }
+export default waitForDOMUpdate

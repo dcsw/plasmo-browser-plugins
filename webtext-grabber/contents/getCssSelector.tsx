@@ -1,3 +1,5 @@
+import exp = require("constants");
+
 // Improved css selection inspired by https://www.perplexity.ai/search/what-s-the-best-typescript-or-u0dTbpZfSVmEfJGrLWKaxQ
 export const getCssSelector = (node: Node): string => {
     if (!node || !node.parentNode) {
@@ -42,3 +44,4 @@ export const getCssSelector = (node: Node): string => {
     const parentSelector = buildElementPath(parentElement);
     return parentSelector
 }
+export default getCssSelector

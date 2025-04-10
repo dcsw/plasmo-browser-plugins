@@ -66,3 +66,4 @@ export const selectPageNode = async (req, res) => {
     res.send(JSON.stringify(error))
   }
 }
+export default selectPageNode

@@ -19,3 +19,4 @@ export const clickPageElement = async (req, res) => {
     res.send(JSON.stringify(error))
   }
 }
+export default clickPageElement

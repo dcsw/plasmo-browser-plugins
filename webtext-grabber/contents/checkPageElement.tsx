@@ -6,3 +6,4 @@ export const checkPageElement = async (req, res) => {
     res.send(JSON.stringify(error))
   }
 }
+export default checkPageElement

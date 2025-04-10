@@ -58,3 +58,4 @@ export const screenCapture = async (req, res) => {
     res.send(JSON.stringify(error))
   }
 }
+export default screenCapture

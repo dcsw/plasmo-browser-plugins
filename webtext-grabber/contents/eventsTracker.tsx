@@ -39,3 +39,4 @@
 //     delete listeners[eventType];
 //   }
 // }
+export default null
