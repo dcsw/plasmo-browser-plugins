@@ -12,7 +12,7 @@ const captureFullPage = async (selector: string) => {
     }
     try {
       const imageURL = await htmlToImage.toPng(element, {
-        // useCORS: true,
+        useCORS: true,
         allowTaint: false,
         backgroundColor: "#FFFFFF", // Prevents transparent background
         height: element.scrollHeight,

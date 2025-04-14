@@ -1,10 +1,10 @@
 import type { PlasmoCSConfig } from "plasmo"
 import { useMessage } from "@plasmohq/messaging/hook"
-import { checkPageElement } from './checkPageElement'
-import { clickPageElement } from './clickPageElement'
-import { waitForDOMUpdate } from './waitForDOMChange'
-import { selectPageNode } from './selectPageElement'
-import { screenCapture } from './screenCapture-html2canvas'
+import { checkPageElement } from '../contents_utils/checkPageElement'
+import { clickPageElement } from '../contents_utils/clickPageElement'
+import { waitForDOMUpdate } from '../contents_utils/waitForDOMChange'
+import { selectPageNode } from '../contents_utils/selectPageElement'
+import { screenCapture } from '../contents_utils/screenCapture-html2canvas'
 
 export const config: PlasmoCSConfig = {
     matches: ["<all_urls>"],

@@ -2,7 +2,7 @@
 
 export const clickPageElement = async (req, res) => {
   try {
-    let el = await document.querySelector(req.body.sel), hasClickListener = false
+    let el = await document.querySelector(req.body.sel)
     // while (!checkForListeners(el, "click") && el.parentNode) // apparently not needed
     //   el = el.parentNode
     const makeMouseEvent = (eStr) => {
