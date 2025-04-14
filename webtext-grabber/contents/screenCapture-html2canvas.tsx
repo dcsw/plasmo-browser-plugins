@@ -2,29 +2,54 @@ import html2canvas from './html2canvas.min';
 import * as htmlToImage from 'html-to-image';
 
 const captureFullPage = async (selector: string) => {
-  const element: HTMLNode = document.querySelector(selector);
+  const element: Node = document.querySelector(selector);
   if (element) {
+    let fontEmbedCSS = null
     try {
-      const fontEmbedCSS = await htmlToImage.getFontEmbedCSS(element);
+      fontEmbedCSS = await htmlToImage.getFontEmbedCSS(element);
+    } catch (e) {
+      console.error(e)
+    }
+    try {
       const imageURL = await htmlToImage.toPng(element, {
         // useCORS: true,
+        allowTaint: false,
         backgroundColor: "#FFFFFF", // Prevents transparent background
         height: element.scrollHeight,
         cacheBust: true,
         includeQueryParams: true,
         fontEmbedCSS,
-        skipAutoScale: true
+        skipAutoScale: true,
+        logging: true,
+        imageTimeout: 30000,
+        foreignObjectRendering: true,
+        scale: 1,
+        onclone: (clonedDoc: any) => {
+          const svgElements = clonedDoc.querySelectorAll('svg');
+          svgElements.forEach((svg) => {
+            const bbox = svg.getBoundingClientRect();
+            svg.setAttribute('width', bbox.width);
+            svg.setAttribute('height', bbox.height);
+          });
+        }
       })
       return imageURL
     } catch (err) {
+      alert('Whoops! My first try failed...trying a different way...' + err.message);
       try {
         const canvas = await html2canvas(element, {
           // windowWidth: window.outerWidth,
           // windowHeight: window.outerHeight,
           // scale: 1,
-          allowTaint: true,
-          logging: false,
           useCORS: true,
+          allowTaint: false,
+          backgroundColor: "#FFFFFF", // Prevents transparent background
+          height: element.scrollHeight,
+          cacheBust: true,
+          includeQueryParams: true,
+          fontEmbedCSS,
+          skipAutoScale: true,
+          logging: true,
           imageTimeout: 30000,
           foreignObjectRendering: true,
           scale: 1,
@@ -41,7 +66,7 @@ const captureFullPage = async (selector: string) => {
         const imageURL = await canvas.toDataURL('image/png');
         return imageURL;
       } catch (err) {
-        alert('oops, something went wrong!' + err.message);
+        alert('Oops! Something went wrong!' + err.message);
         throw err
       }
     }
