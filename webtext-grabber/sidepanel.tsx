@@ -186,7 +186,7 @@ const IndexPopup = () => {
             <ImNext className="getSelector" onClick={getScreenShotSelector} />
           </span>
           <input className="settingInput" value={selScreenShot} onChange={async (e) => setSelScreenShot(e.target.value)}></input>
-          <TiDeleteOutline className="deleteIcon" onClick={() => setSelScreenShot("")} /> {/* Inside the flex container */}
+          <TiDeleteOutline className="deleteIcon" onClick={() => setSelScreenShot("html")} /> {/* Inside the flex container */}
         </div>
         <div className="inputContainer"> {/* New container for input and delete icon */}
           <span className="settingNameSection">
