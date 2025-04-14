@@ -57,7 +57,7 @@
       "<all_urls>"
     ],
     "content_security_policy": {
-      "extension_pages": "script-src 'self'; object-src 'self'; style-src 'self'; img-src 'self' data:"
+      "extension_pages": "script-src 'self'; object-src 'self'; style-src 'self'; img-src 'self' data:; upgrade-insecure-requests;"
     },
     "content_scripts-nope-not-needed": [
       {
